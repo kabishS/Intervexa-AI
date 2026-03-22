@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aptitude Test — Intervexa AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@300;400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+<style>
+:root{
+  --bg:#080A0F;--bg2:#0D1117;--bg3:#111820;
+  --panel:rgba(255,255,255,0.03);--border:rgba(255,255,255,0.07);
+  --accent:#00E5FF;--accent2:#7B61FF;--accent3:#FF6B6B;
+  --text:#F0F4FF;--muted:#5A6480;--muted2:#8A94B0;--green:#00FFB3;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;line-height:1.6;display:flex;flex-direction:column;min-height:100vh}
+
+/* Background orbs */
+.orb{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0}
+.orb1{width:500px;height:500px;background:var(--accent2);top:-150px;left:-150px;opacity:.12}
+.orb2{width:400px;height:400px;background:var(--accent);bottom:50px;right:-100px;opacity:.08}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;padding:16px 40px;display:flex;align-items:center;justify-content:space-between;background:rgba(8,10,15,.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-logo{display:flex;align-items:center;gap:10px;font-size:1.1rem;font-weight:800;letter-spacing:-.02em;text-decoration:none;color:var(--text)}
+.nav-logo-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--accent2),var(--accent));border-radius:9px;display:grid;place-items:center;font-size:.9rem}
+.nav-logo span{color:var(--accent2)}
+.nav-badge{padding:4px 12px;background:rgba(123,97,255,.12);border:1px solid rgba(123,97,255,.3);border-radius:20px;font-size:.72rem;font-family:'DM Mono',monospace;color:var(--accent2);letter-spacing:.06em;text-transform:uppercase}
+.back-btn{padding:7px 16px;border:1px solid var(--border);border-radius:8px;background:transparent;color:var(--muted2);font-family:'Syne',sans-serif;font-size:.8rem;cursor:pointer;transition:all .2s;text-decoration:none}
+.back-btn:hover{border-color:var(--accent2);color:var(--accent2)}
+
+/* MAIN LAYOUT */
+.main{flex:1;display:flex;align-items:flex-start;justify-content:center;padding:32px 20px 48px;position:relative;z-index:1}
+.card{width:100%;max-width:720px;background:var(--bg2);border:1px solid rgba(123,97,255,.2);border-radius:28px;overflow:hidden;box-shadow:0 40px 120px rgba(0,0,0,.6)}
+
+/* SCREENS */
+.screen{display:none;flex-direction:column}
+.screen.active{display:flex}
+
+/* ── WELCOME ── */
+.welcome{padding:52px 48px;align-items:center;text-align:center;gap:24px}
+.apt-logo-big{width:88px;height:88px;background:linear-gradient(135deg,var(--accent2),var(--accent));border-radius:24px;display:grid;place-items:center;font-size:2.4rem;margin:0 auto;box-shadow:0 16px 48px rgba(123,97,255,.3)}
+.apt-main-title{font-size:2.2rem;font-weight:800;letter-spacing:-.04em;line-height:1.1}
+.apt-main-title em{font-style:italic;font-family:'Instrument Serif',serif;color:var(--accent2)}
+.apt-main-desc{color:var(--muted2);font-size:.925rem;line-height:1.7;max-width:460px}
+.rules-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;width:100%}
+.rule-box{padding:16px 10px;background:var(--bg3);border:1px solid var(--border);border-radius:14px;text-align:center}
+.rule-val{font-size:1.5rem;font-weight:800;color:var(--accent2);display:block;letter-spacing:-.02em}
+.rule-lbl{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-top:3px;font-family:'DM Mono',monospace}
+.welcome-btn{padding:16px 48px;background:linear-gradient(135deg,var(--accent2),var(--accent));border:none;border-radius:14px;color:#fff;font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;transition:all .3s;width:100%;max-width:320px;letter-spacing:.01em}
+.welcome-btn:hover{transform:translateY(-2px);box-shadow:0 16px 44px rgba(123,97,255,.35)}
+
+/* ── CATEGORY ── */
+.cats-scr{padding:40px}
+.scr-hdr{margin-bottom:24px}
+.scr-step{font-family:'DM Mono',monospace;font-size:.68rem;color:var(--accent2);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
+.scr-title{font-size:1.5rem;font-weight:800;letter-spacing:-.03em}
+.cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}
+.cat-card{padding:20px 14px;background:var(--bg3);border:2px solid var(--border);border-radius:16px;cursor:pointer;transition:all .2s;text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px}
+.cat-card:hover{border-color:rgba(123,97,255,.4);background:rgba(123,97,255,.06);transform:translateY(-2px)}
+.cat-card.selected{border-color:var(--accent2);background:rgba(123,97,255,.1);box-shadow:0 0 22px rgba(123,97,255,.18)}
+.cat-icon{font-size:2rem}
+.cat-name{font-size:.9rem;font-weight:700;color:var(--text)}
+.cat-sub{font-size:.68rem;color:var(--muted);font-family:'DM Mono',monospace}
+.go-btn{width:100%;padding:15px;background:linear-gradient(135deg,var(--accent2),var(--accent));border:none;border-radius:12px;color:#fff;font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;cursor:pointer;transition:all .2s}
+.go-btn:hover{transform:translateY(-1px);box-shadow:0 12px 36px rgba(123,97,255,.3)}
+
+/* ── QUESTION ── */
+.q-scr{flex-direction:column}
+.q-topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 28px;background:var(--bg3);border-bottom:1px solid var(--border);flex-shrink:0}
+.q-progress-wrap{display:flex;align-items:center;gap:14px}
+.q-num-lbl{font-family:'DM Mono',monospace;font-size:.75rem;color:var(--muted2);white-space:nowrap}
+.q-prog-track{width:140px;height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden}
+.q-prog-fill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:2px;transition:width .4s ease}
+.timer-group{display:flex;align-items:center;gap:10px}
+.timer-svg{width:40px;height:40px;flex-shrink:0}
+.timer-svg circle{transition:stroke-dashoffset 1s linear;stroke-linecap:round}
+.timer-num{font-family:'DM Mono',monospace;font-size:1.15rem;font-weight:700;color:var(--accent2);min-width:26px;text-align:center}
+.timer-num.danger{color:var(--accent3);animation:blink .5s ease infinite alternate}
+@keyframes blink{from{opacity:1}to{opacity:.4}}
+
+.q-body{padding:36px 40px;display:flex;flex-direction:column;gap:22px}
+.q-label{font-family:'DM Mono',monospace;font-size:.68rem;color:var(--accent2);letter-spacing:.1em;text-transform:uppercase}
+.q-text{font-size:1.2rem;font-weight:700;line-height:1.55;color:var(--text)}
+.options{display:flex;flex-direction:column;gap:10px}
+.opt{padding:15px 20px;background:var(--bg3);border:1.5px solid var(--border);border-radius:13px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:15px;font-size:.92rem;font-weight:500;color:var(--muted2);width:100%;text-align:left}
+.opt:hover:not(.disabled){border-color:rgba(123,97,255,.45);background:rgba(123,97,255,.07);color:var(--text);transform:translateX(3px)}
+.opt.disabled{cursor:not-allowed;pointer-events:none}
+.opt.correct{border-color:var(--green)!important;background:rgba(0,255,179,.08)!important;color:var(--green)!important}
+.opt.wrong{border-color:var(--accent3)!important;background:rgba(255,107,107,.08)!important;color:var(--accent3)!important}
+.opt-badge{width:30px;height:30px;border-radius:8px;background:var(--panel);border:1px solid var(--border);display:grid;place-items:center;font-family:'DM Mono',monospace;font-size:.78rem;font-weight:700;flex-shrink:0;transition:all .2s}
+.opt.correct .opt-badge{background:var(--green);border-color:var(--green);color:#080A0F}
+.opt.wrong .opt-badge{background:var(--accent3);border-color:var(--accent3);color:#fff}
+.explain-box{padding:14px 16px;background:rgba(123,97,255,.07);border:1px solid rgba(123,97,255,.2);border-radius:12px;display:none}
+.explain-box.show{display:block;animation:fadeUp .3s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.explain-lbl{font-family:'DM Mono',monospace;font-size:.65rem;color:var(--accent2);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px}
+.explain-text{font-size:.82rem;color:var(--muted2);line-height:1.65}
+
+.q-footer{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;border-top:1px solid var(--border);flex-shrink:0}
+.status-lbl{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--muted)}
+.next-btn{padding:10px 24px;background:var(--accent2);border:none;border-radius:9px;color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:.85rem;cursor:pointer;transition:all .2s}
+.next-btn:hover{background:var(--accent);box-shadow:0 6px 24px rgba(0,229,255,.25)}
+
+/* ── RESULTS ── */
+.res-scr{padding:36px 40px;flex-direction:column;gap:22px;max-height:90vh;overflow-y:auto}
+.res-scr::-webkit-scrollbar{width:4px}
+.res-scr::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.score-banner{display:flex;align-items:center;gap:28px;padding:28px;background:var(--bg3);border:1px solid rgba(123,97,255,.2);border-radius:20px}
+.score-big{font-size:4rem;font-weight:800;letter-spacing:-.05em;line-height:1}
+.score-big span{font-size:1.6rem;color:var(--muted);font-weight:500}
+.score-grade{font-size:.8rem;font-family:'DM Mono',monospace;letter-spacing:.08em;text-transform:uppercase;margin-top:6px}
+.score-stats{display:flex;flex-direction:column;gap:9px;flex:1}
+.stat-row{display:flex;align-items:center;justify-content:space-between;padding:9px 14px;background:var(--panel);border:1px solid var(--border);border-radius:10px}
+.stat-row .sr-l{font-size:.78rem;color:var(--muted2)}.stat-row .sr-v{font-size:.88rem;font-weight:700}
+.review-title{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--accent2);letter-spacing:.1em;text-transform:uppercase}
+.review-list{display:flex;flex-direction:column;gap:12px}
+.rev-item{padding:18px;background:var(--bg3);border:1px solid var(--border);border-radius:14px}
+.rev-item.ok{border-color:rgba(0,255,179,.2)}
+.rev-item.bad{border-color:rgba(255,107,107,.2)}
+.rev-q{font-size:.85rem;font-weight:600;color:var(--text);margin-bottom:9px;line-height:1.5}
+.rev-tag{display:inline-block;font-size:.72rem;font-family:'DM Mono',monospace;padding:4px 10px;border-radius:6px;margin-bottom:5px}
+.rev-tag.correct-tag{background:rgba(0,255,179,.1);color:var(--green)}
+.rev-tag.wrong-tag{background:rgba(255,107,107,.1);color:var(--accent3)}
+.rev-tag.skip-tag{background:rgba(255,255,255,.05);color:var(--muted2)}
+.rev-correct{font-size:.75rem;color:var(--green);margin-top:4px;font-family:'DM Mono',monospace}
+.rev-exp{font-size:.75rem;color:var(--muted2);margin-top:6px;line-height:1.6}
+.res-actions{display:flex;gap:12px;padding-bottom:4px}
+.retry-btn{padding:14px 32px;background:linear-gradient(135deg,var(--accent2),var(--accent));border:none;border-radius:12px;color:#fff;font-family:'Syne',sans-serif;font-weight:800;font-size:.95rem;cursor:pointer;transition:all .2s}
+.retry-btn:hover{transform:translateY(-1px);box-shadow:0 12px 36px rgba(123,97,255,.3)}
+.ghost-btn{padding:14px 24px;border:1px solid var(--border);border-radius:12px;background:transparent;color:var(--muted2);font-family:'Syne',sans-serif;font-size:.9rem;cursor:pointer;transition:all .2s}
+.ghost-btn:hover{border-color:var(--accent2);color:var(--accent2)}
+
+@media(max-width:640px){
+  nav{padding:14px 20px}
+  .welcome{padding:36px 24px}
+  .rules-grid{grid-template-columns:repeat(2,1fr)}
+  .cats-scr{padding:28px 20px}
+  .cat-grid{grid-template-columns:repeat(2,1fr)}
+  .q-body{padding:24px 20px}
+  .q-topbar,.q-footer{padding:12px 20px}
+  .res-scr{padding:24px 20px}
+  .score-banner{flex-direction:column;align-items:flex-start;gap:16px}
+  .apt-main-title{font-size:1.7rem}
+}
+</style>
+</head>
+<body>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="intervexa-ai.html" class="nav-logo">
+    <div class="nav-logo-icon">⚡</div>
+    Intervexa <span>AI</span>
+  </a>
+  <div class="nav-badge">🧠 Aptitude Test</div>
+  <a href="index.html" class="back-btn">← Back</a>
+</nav>
+
+<!-- MAIN -->
+<div class="main">
+ <div class="card">
+
+  <!-- WELCOME SCREEN -->
+  <div class="screen welcome active" id="scrWelcome">
+    <div class="apt-logo-big">🧠</div>
+    <div class="apt-main-title">Aptitude <em>Test</em></div>
+    <p class="apt-main-desc">Test your logical reasoning, quantitative aptitude, and verbal ability — the kind of questions asked in real placement exams and job assessments.</p>
+    <div class="rules-grid">
+      <div class="rule-box"><span class="rule-val">10</span><div class="rule-lbl">Questions</div></div>
+      <div class="rule-box"><span class="rule-val">30s</span><div class="rule-lbl">Per Question</div></div>
+      <div class="rule-box"><span class="rule-val">4</span><div class="rule-lbl">Options Each</div></div>
+      <div class="rule-box"><span class="rule-val">0</span><div class="rule-lbl">Negative Mark</div></div>
+    </div>
+    <button class="welcome-btn" onclick="goToCats()">Choose Category →</button>
+  </div>
+
+  <!-- CATEGORY SCREEN -->
+  <div class="screen cats-scr" id="scrCats">
+    <div class="scr-hdr">
+      <div class="scr-step">Step 1 of 2</div>
+      <div class="scr-title">Pick a Category</div>
+    </div>
+    <div class="cat-grid">
+      <div class="cat-card selected" id="cat-quant" onclick="pickCat('quant')">
+        <div class="cat-icon">🔢</div>
+        <div class="cat-name">Quantitative</div>
+        <div class="cat-sub">Math & Numbers</div>
+      </div>
+      <div class="cat-card" id="cat-logical" onclick="pickCat('logical')">
+        <div class="cat-icon">🧩</div>
+        <div class="cat-name">Logical</div>
+        <div class="cat-sub">Patterns & Reasoning</div>
+      </div>
+      <div class="cat-card" id="cat-verbal" onclick="pickCat('verbal')">
+        <div class="cat-icon">📝</div>
+        <div class="cat-name">Verbal</div>
+        <div class="cat-sub">Language & Grammar</div>
+      </div>
+      <div class="cat-card" id="cat-data" onclick="pickCat('data')">
+        <div class="cat-icon">📊</div>
+        <div class="cat-name">Data Interpretation</div>
+        <div class="cat-sub">Tables & Charts</div>
+      </div>
+      <div class="cat-card" id="cat-coding" onclick="pickCat('coding')">
+        <div class="cat-icon">💻</div>
+        <div class="cat-name">Coding Aptitude</div>
+        <div class="cat-sub">CS Fundamentals</div>
+      </div>
+      <div class="cat-card" id="cat-mixed" onclick="pickCat('mixed')">
+        <div class="cat-icon">🎯</div>
+        <div class="cat-name">Mixed</div>
+        <div class="cat-sub">All Categories</div>
+      </div>
+    </div>
+    <button class="go-btn" onclick="startTest()">⚡ Start Test</button>
+  </div>
+
+  <!-- QUESTION SCREEN -->
+  <div class="screen q-scr" id="scrQuestion">
+    <div class="q-topbar">
+      <div class="q-progress-wrap">
+        <div class="q-num-lbl" id="qNumLbl">Q 1 / 10</div>
+        <div class="q-prog-track"><div class="q-prog-fill" id="qProgFill" style="width:10%"></div></div>
+      </div>
+      <div class="timer-group">
+        <svg class="timer-svg" viewBox="0 0 44 44">
+          <circle cx="22" cy="22" r="19" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="3"/>
+          <circle id="timerRing" cx="22" cy="22" r="19" fill="none" stroke="var(--accent2)" stroke-width="3"
+            stroke-dasharray="119.4 119.4" stroke-dashoffset="0" transform="rotate(-90 22 22)"/>
+        </svg>
+        <div class="timer-num" id="timerNum">30</div>
+      </div>
+    </div>
+
+    <div class="q-body">
+      <div class="q-label" id="qLabel">Question 1</div>
+      <div class="q-text" id="qText">Loading…</div>
+      <div class="options" id="optionsWrap"></div>
+      <div class="explain-box" id="explainBox">
+        <div class="explain-lbl">💡 Explanation</div>
+        <div class="explain-text" id="explainText"></div>
+      </div>
+    </div>
+
+    <div class="q-footer">
+      <div class="status-lbl" id="statusLbl">Not answered yet</div>
+      <button class="next-btn" id="nextBtn" onclick="nextQ()">Skip →</button>
+    </div>
+  </div>
+
+  <!-- RESULTS SCREEN -->
+  <div class="screen res-scr" id="scrResults">
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <div>
+        <div style="font-family:'DM Mono',monospace;font-size:.68rem;color:var(--accent2);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px">Test Complete</div>
+        <div style="font-size:1.5rem;font-weight:800;letter-spacing:-.03em">Your <span style="color:var(--green);font-family:'Instrument Serif',serif;font-style:italic">Results</span></div>
+      </div>
+    </div>
+
+    <div class="score-banner">
+      <div>
+        <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--muted2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">Score</div>
+        <div class="score-big" id="scoreBig">0<span>/10</span></div>
+        <div class="score-grade" id="scoreGrade"></div>
+      </div>
+      <div class="score-stats">
+        <div class="stat-row"><span class="sr-l">✅ Correct</span><span class="sr-v" id="resCorrect" style="color:var(--green)">0</span></div>
+        <div class="stat-row"><span class="sr-l">❌ Wrong</span><span class="sr-v" id="resWrong" style="color:var(--accent3)">0</span></div>
+        <div class="stat-row"><span class="sr-l">⏭ Skipped</span><span class="sr-v" id="resSkipped" style="color:var(--muted2)">0</span></div>
+        <div class="stat-row"><span class="sr-l">⏱ Avg Time / Q</span><span class="sr-v" id="resAvg" style="color:var(--accent)">0s</span></div>
+      </div>
+    </div>
+
+    <div class="review-title">Question Review</div>
+    <div class="review-list" id="reviewList"></div>
+
+    <div class="res-actions">
+      <button class="retry-btn" onclick="retry()">Try Again ↺</button>
+      <button class="ghost-btn" onclick="goToWelcome()">Change Category</button>
+    </div>
+  </div>
+
+ </div><!-- /card -->
+</div><!-- /main -->
+
+<script>
+// ══════════════════════════ QUESTION BANK ══════════════════════════
+var BANK = {
+  quant:[
+    {q:"If a train travels 360 km in 4 hours, what is its speed in m/s?",opts:["25 m/s","30 m/s","15 m/s","20 m/s"],ans:0,exp:"Speed = 360 ÷ 4 = 90 km/h. Convert: 90 × (1000/3600) = 25 m/s"},
+    {q:"A shopkeeper sells an item at 20% profit. Cost price is ₹500. What is the selling price?",opts:["₹580","₹600","₹620","₹560"],ans:1,exp:"SP = CP × (1 + profit%) = 500 × 1.2 = ₹600"},
+    {q:"Find the LCM of 12, 18, and 24.",opts:["48","72","36","96"],ans:1,exp:"LCM(12,18,24) = 72"},
+    {q:"If 8 men complete a work in 15 days, how many days will 12 men take?",opts:["8 days","10 days","12 days","6 days"],ans:1,exp:"Men × Days = constant → 8×15 = 12×D → D = 10 days"},
+    {q:"₹1200 lent at 10% per annum simple interest. What is the interest after 3 years?",opts:["₹360","₹400","₹300","₹420"],ans:0,exp:"SI = (P×R×T)/100 = (1200×10×3)/100 = ₹360"},
+    {q:"What is 15% of 240?",opts:["36","32","38","34"],ans:0,exp:"15% of 240 = 0.15 × 240 = 36"},
+    {q:"Ratio of two numbers is 3:5, their sum is 160. Find the larger number.",opts:["90","100","80","110"],ans:1,exp:"3x+5x=160 → x=20 → larger = 5×20 = 100"},
+    {q:"A car bought for ₹1,00,000 depreciates 10% per year. Value after 2 years?",opts:["₹81,000","₹82,000","₹80,000","₹85,000"],ans:0,exp:"After 2 years = 1,00,000 × 0.9 × 0.9 = ₹81,000"},
+    {q:"Find the average of the first 10 odd numbers.",opts:["9","10","11","8"],ans:1,exp:"First 10 odd numbers: 1,3,5…19. Sum=100, Avg=100/10=10"},
+    {q:"If 5x – 3 = 22, then x = ?",opts:["4","5","6","3"],ans:1,exp:"5x = 25 → x = 5"}
+  ],
+  logical:[
+    {q:"Find the next term: 2, 6, 12, 20, 30, __",opts:["40","42","44","38"],ans:1,exp:"Differences: 4,6,8,10,12 → next = 30+12 = 42"},
+    {q:"Which number replaces ?: 3, 9, 27, 81, ?",opts:["162","243","324","189"],ans:1,exp:"Each term × 3: 81×3 = 243"},
+    {q:"All cats are animals. Some animals are dogs. Which statement is definitely true?",opts:["Some cats are dogs","All animals are cats","Some animals are dogs","No cats are dogs"],ans:2,exp:"We only know some animals are dogs — not that cats are dogs"},
+    {q:"A is B's brother. C is A's mother. D is C's father. How is D related to B?",opts:["Uncle","Grandfather","Father","Great grandfather"],ans:1,exp:"D is C's father → C is B's mother → D is B's grandfather"},
+    {q:"If FISH = GRUJ in a code, what does BIRD represent?",opts:["CJSE","CJSF","CJRE","DJSE"],ans:0,exp:"Each letter shifted +1: B→C, I→J, R→S, D→E → CJSE"},
+    {q:"Find the odd one out: 2, 3, 5, 7, 9, 11",opts:["9","3","5","11"],ans:0,exp:"9 = 3×3, not a prime. All others are prime numbers"},
+    {q:"Pointing to a man, a woman says 'His mother is the only daughter of my mother.' How is she related to the man?",opts:["Mother","Sister","Aunt","Grandmother"],ans:0,exp:"Only daughter of my mother = herself → she is his mother"},
+    {q:"In a row of 40 students, Rita is 15th from the left. Her position from the right?",opts:["25","26","27","24"],ans:1,exp:"Position from right = 40 – 15 + 1 = 26"},
+    {q:"Complete the series: Z, X, V, T, __, P",opts:["Q","R","S","U"],ans:1,exp:"Every alternate letter backwards: Z, X, V, T, R, P"},
+    {q:"If 6 is coded as 36, 8 as 64, then 5 is coded as?",opts:["20","25","30","10"],ans:1,exp:"Pattern: number squared → 5² = 25"}
+  ],
+  verbal:[
+    {q:"Choose the synonym of BENEVOLENT:",opts:["Cruel","Kind","Selfish","Angry"],ans:1,exp:"Benevolent = well-meaning and kindly → synonym: Kind"},
+    {q:"Choose the antonym of LOQUACIOUS:",opts:["Talkative","Verbose","Taciturn","Garrulous"],ans:2,exp:"Loquacious = very talkative. Antonym = Taciturn (habitually silent)"},
+    {q:"Fill in: She was so tired she could __ keep her eyes open.",opts:["barely","nearly","just","almost"],ans:0,exp:"'barely' means only just able to — she could barely keep her eyes open"},
+    {q:"Choose the correctly spelled word:",opts:["Accomodate","Accommodate","Acommodate","Acomodate"],ans:1,exp:"Correct spelling: Accommodate (double c, double m)"},
+    {q:"Identify the part of speech: She QUICKLY finished her work.",opts:["Adjective","Verb","Adverb","Noun"],ans:2,exp:"'Quickly' modifies the verb 'finished' → it is an adverb"},
+    {q:"What does the idiom 'Break the ice' mean?",opts:["Destroy something","Initiate conversation","Stop a fight","Cool something down"],ans:1,exp:"'Break the ice' = to initiate conversation or ease social tension"},
+    {q:"Which sentence is grammatically correct?",opts:["He don't know","Neither of them are right","She has been working since morning","They was present"],ans:2,exp:"Correct use of present perfect continuous tense"},
+    {q:"One-word substitution: 'A person who can't be corrected'",opts:["Invincible","Incorrigible","Infallible","Impeccable"],ans:1,exp:"Incorrigible = not able to be corrected or reformed"},
+    {q:"The meaning of EPHEMERAL is:",opts:["Permanent","Long-lasting","Short-lived","Recurring"],ans:2,exp:"Ephemeral = lasting for a very short time"},
+    {q:"Rearrange: [the / loves / she / reading / books]",opts:["She loves the reading books","She loves reading the books","The she loves reading books","Books the loves she reading"],ans:1,exp:"Correct: 'She loves reading the books'"}
+  ],
+  data:[
+    {q:"In a class of 50 students, 30 passed Maths, 25 passed Science, 10 passed both. How many passed at least one?",opts:["40","45","35","50"],ans:1,exp:"At least one = 30+25−10 = 45 (inclusion-exclusion)"},
+    {q:"Pie chart: 30% for Academics out of 400 total students. How many in Academics?",opts:["100","120","130","110"],ans:1,exp:"30% of 400 = 120 students"},
+    {q:"Sales: Jan=100, Apr=250. What is the % increase?",opts:["100%","125%","150%","175%"],ans:2,exp:"Increase=150. % = (150/100)×100 = 150%"},
+    {q:"Mean of 5 numbers is 20. Four of them: 15, 18, 22, 25. Find the fifth.",opts:["18","20","22","24"],ans:1,exp:"Sum=5×20=100. Fifth = 100−(15+18+22+25) = 20"},
+    {q:"Revenue: Q1=₹2L, Q2=₹3L, Q3=₹2.5L, Q4=₹4L. Average quarterly revenue?",opts:["₹2.75L","₹3L","₹2.5L","₹3.25L"],ans:0,exp:"Avg = (2+3+2.5+4)/4 = 11.5/4 = ₹2.875L ≈ ₹2.75L"},
+    {q:"Product A: 500 units @ ₹20. Product B: 300 units @ ₹30. Total revenue?",opts:["₹15,000","₹17,000","₹19,000","₹21,000"],ans:2,exp:"Revenue = (500×20)+(300×30) = 10000+9000 = ₹19,000"},
+    {q:"Profit margin is 25% on sales of ₹80,000. What is the profit?",opts:["₹16,000","₹18,000","₹20,000","₹22,000"],ans:2,exp:"Profit = 25% of 80,000 = ₹20,000"},
+    {q:"Temperatures: Mon=30°, Tue=32°, Wed=28°, Thu=35°, Fri=31°. Highest?",opts:["Monday","Wednesday","Thursday","Friday"],ans:2,exp:"Thursday = 35°C (highest)"},
+    {q:"40% of students in a school of 500 are girls. How many boys?",opts:["200","250","300","280"],ans:2,exp:"Girls = 200. Boys = 500−200 = 300"},
+    {q:"A shop had 200 items. 40% sold in morning, 25% of remaining sold in evening. Items left?",opts:["90","100","80","110"],ans:0,exp:"Morning sold: 80. Remaining: 120. Evening: 30. Left: 90"}
+  ],
+  coding:[
+    {q:"What is the time complexity of binary search?",opts:["O(n)","O(log n)","O(n²)","O(1)"],ans:1,exp:"Binary search halves the search space each step → O(log n)"},
+    {q:"Which data structure uses LIFO (Last In First Out)?",opts:["Queue","Array","Stack","Linked List"],ans:2,exp:"Stack uses LIFO — last pushed is first to be popped"},
+    {q:"What does HTML stand for?",opts:["Hyper Text Markup Language","High Text Machine Language","Hyper Transfer Markup Language","None"],ans:0,exp:"HTML = HyperText Markup Language"},
+    {q:"Which sorting algorithm has the best average case complexity?",opts:["Bubble Sort","Selection Sort","Quick Sort","Insertion Sort"],ans:2,exp:"Quick Sort averages O(n log n)"},
+    {q:"What is the output of: print(2 ** 3) in Python?",opts:["6","8","9","5"],ans:1,exp:"** is exponentiation: 2³ = 8"},
+    {q:"In OOP, which concept allows a class to inherit from another?",opts:["Encapsulation","Polymorphism","Inheritance","Abstraction"],ans:2,exp:"Inheritance lets a child class acquire parent class properties"},
+    {q:"What does SQL stand for?",opts:["Structured Query Language","Simple Question Language","System Query Logic","Structured Question Logic"],ans:0,exp:"SQL = Structured Query Language"},
+    {q:"Which of these is NOT a primitive type in Java?",opts:["int","String","boolean","char"],ans:1,exp:"String is a class (reference type), not a primitive in Java"},
+    {q:"Maximum nodes in a binary tree of height 3?",opts:["7","8","15","14"],ans:2,exp:"Max = 2^(h+1)−1 = 2^4−1 = 15"},
+    {q:"What does API stand for?",opts:["Application Programming Interface","App Protocol Integration","Automated Program Interface","Application Process Interaction"],ans:0,exp:"API = Application Programming Interface"}
+  ],
+  mixed:[]
+};
+
+// Build mixed on load
+function buildMixed(){
+  var all=[];
+  ['quant','logical','verbal','data','coding'].forEach(function(c){
+    BANK[c].forEach(function(q){ all.push(q); });
+  });
+  shuffle(all);
+  BANK.mixed = all.slice(0,10);
+}
+function shuffle(arr){
+  for(var i=arr.length-1;i>0;i--){
+    var j=Math.floor(Math.random()*(i+1));
+    var t=arr[i];arr[i]=arr[j];arr[j]=t;
+  }
+}
+buildMixed();
+
+// ══════════════════════════ STATE ══════════════════════════
+var state = {
+  cat:'quant', questions:[], curQ:0,
+  selected:[], times:[], timerInterval:null, timeLeft:30
+};
+
+// ══════════════════════════ NAVIGATION ══════════════════════════
+function showScreen(id){
+  ['scrWelcome','scrCats','scrQuestion','scrResults'].forEach(function(s){
+    document.getElementById(s).classList.toggle('active', s===id);
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function goToWelcome(){ clearInterval(state.timerInterval); showScreen('scrWelcome'); }
+function goToCats(){ showScreen('scrCats'); }
+
+function pickCat(c){
+  state.cat=c;
+  ['quant','logical','verbal','data','coding','mixed'].forEach(function(id){
+    document.getElementById('cat-'+id).classList.toggle('selected',id===c);
+  });
+}
+
+// ══════════════════════════ START TEST ══════════════════════════
+function startTest(){
+  if(state.cat==='mixed') buildMixed();
+  var pool = BANK[state.cat].slice();
+  shuffle(pool);
+  state.questions = pool.slice(0,10);
+  state.curQ=0;
+  state.selected=new Array(10).fill(-1);
+  state.times=new Array(10).fill(0);
+  showScreen('scrQuestion');
+  loadQ();
+}
+
+// ══════════════════════════ LOAD QUESTION ══════════════════════════
+function loadQ(){
+  var i=state.curQ;
+  var q=state.questions[i];
+  document.getElementById('qNumLbl').textContent='Q '+(i+1)+' / 10';
+  document.getElementById('qProgFill').style.width=((i+1)/10*100)+'%';
+  document.getElementById('qLabel').textContent='Question '+(i+1);
+  document.getElementById('qText').textContent=q.q;
+  document.getElementById('explainBox').classList.remove('show');
+  document.getElementById('statusLbl').textContent='Not answered yet';
+  document.getElementById('statusLbl').style.color='';
+  document.getElementById('nextBtn').textContent='Skip →';
+
+  var letters=['A','B','C','D'];
+  var html='';
+  q.opts.forEach(function(opt,idx){
+    html+='<button class="opt" id="opt'+idx+'" onclick="selectOpt('+idx+')">'
+      +'<span class="opt-badge">'+letters[idx]+'</span>'
+      +escHtml(opt)
+      +'</button>';
+  });
+  document.getElementById('optionsWrap').innerHTML=html;
+
+  // Timer
+  clearInterval(state.timerInterval);
+  state.timeLeft=30;
+  updateTimer(30);
+  state.timerInterval=setInterval(function(){
+    state.timeLeft--;
+    state.times[state.curQ]++;
+    updateTimer(state.timeLeft);
+    if(state.timeLeft<=0){ clearInterval(state.timerInterval); timeUp(); }
+  },1000);
+}
+
+function updateTimer(t){
+  var el=document.getElementById('timerNum');
+  el.textContent=t;
+  el.className='timer-num'+(t<=10?' danger':'');
+  // SVG ring — circumference of r=19 circle ≈ 119.4
+  var circ=119.4;
+  var offset=circ-(t/30)*circ;
+  document.getElementById('timerRing').style.strokeDashoffset=offset;
+  document.getElementById('timerRing').style.stroke=t<=10?'var(--accent3)':'var(--accent2)';
+}
+
+// ══════════════════════════ SELECT OPTION ══════════════════════════
+function selectOpt(idx){
+  if(state.selected[state.curQ]!==-1) return;
+  clearInterval(state.timerInterval);
+  state.selected[state.curQ]=idx;
+  state.times[state.curQ]=30-state.timeLeft;
+
+  var q=state.questions[state.curQ];
+  // Disable all, mark correct/wrong
+  for(var i=0;i<4;i++){
+    var el=document.getElementById('opt'+i);
+    if(!el) continue;
+    el.classList.add('disabled');
+    if(i===q.ans) el.classList.add('correct');
+    else if(i===idx) el.classList.add('wrong');
+  }
+  // Show explanation
+  document.getElementById('explainText').textContent=q.exp;
+  document.getElementById('explainBox').classList.add('show');
+
+  var isCorrect=(idx===q.ans);
+  var statusEl=document.getElementById('statusLbl');
+  statusEl.textContent=isCorrect?'✅ Correct!':'❌ Incorrect';
+  statusEl.style.color=isCorrect?'var(--green)':'var(--accent3)';
+  document.getElementById('nextBtn').textContent=state.curQ>=9?'See Results →':'Next →';
+}
+
+function timeUp(){
+  var q=state.questions[state.curQ];
+  state.times[state.curQ]=30;
+  // Reveal correct answer
+  var correctEl=document.getElementById('opt'+q.ans);
+  if(correctEl){ correctEl.classList.add('correct'); correctEl.classList.add('disabled'); }
+  for(var i=0;i<4;i++){ var el=document.getElementById('opt'+i); if(el) el.classList.add('disabled'); }
+  document.getElementById('explainText').textContent=q.exp;
+  document.getElementById('explainBox').classList.add('show');
+  var statusEl=document.getElementById('statusLbl');
+  statusEl.textContent='⏱ Time up — skipped';
+  statusEl.style.color='var(--muted2)';
+  document.getElementById('nextBtn').textContent=state.curQ>=9?'See Results →':'Next →';
+}
+
+function nextQ(){
+  clearInterval(state.timerInterval);
+  if(state.curQ>=9){ showResults(); return; }
+  state.curQ++;
+  document.getElementById('statusLbl').style.color='';
+  loadQ();
+}
+
+// ══════════════════════════ RESULTS ══════════════════════════
+function showResults(){
+  clearInterval(state.timerInterval);
+  var correct=0,wrong=0,skipped=0,totalTime=0;
+  state.questions.forEach(function(q,i){
+    var sel=state.selected[i];
+    totalTime+=state.times[i];
+    if(sel===-1) skipped++;
+    else if(sel===q.ans) correct++;
+    else wrong++;
+  });
+
+  var scoreColors=['var(--accent3)','var(--accent2)','var(--accent)','var(--green)'];
+  var colorIdx=correct>=8?3:correct>=5?2:correct>=3?1:0;
+  var grades=['Needs Practice 📚','Developing 📈','Good 👍','Strong ⭐','Outstanding 🏆'];
+  var gradeIdx=correct>=9?4:correct>=7?3:correct>=5?2:correct>=3?1:0;
+
+  document.getElementById('scoreBig').innerHTML=correct+'<span>/10</span>';
+  document.getElementById('scoreBig').style.color=scoreColors[colorIdx];
+  document.getElementById('scoreGrade').textContent=grades[gradeIdx];
+  document.getElementById('scoreGrade').style.color=scoreColors[colorIdx];
+  document.getElementById('resCorrect').textContent=correct;
+  document.getElementById('resWrong').textContent=wrong;
+  document.getElementById('resSkipped').textContent=skipped;
+  document.getElementById('resAvg').textContent=Math.round(totalTime/10)+'s';
+
+  var html='';
+  state.questions.forEach(function(q,i){
+    var sel=state.selected[i];
+    var isCorrect=(sel===q.ans);
+    var isSkip=(sel===-1);
+    html+='<div class="rev-item '+(isSkip?'':isCorrect?'ok':'bad')+'">';
+    html+='<div class="rev-q">Q'+(i+1)+'. '+escHtml(q.q)+'</div>';
+    if(!isSkip){
+      html+='<span class="rev-tag '+(isCorrect?'correct-tag':'wrong-tag')+'">'
+        +(isCorrect?'✅ Correct: ':'❌ Your answer: ')+escHtml(q.opts[sel])+'</span>';
+    } else {
+      html+='<span class="rev-tag skip-tag">⏭ Skipped / Time up</span>';
+    }
+    if(!isCorrect){
+      html+='<div class="rev-correct">✅ Correct answer: '+escHtml(q.opts[q.ans])+'</div>';
+    }
+    html+='<div class="rev-exp">💡 '+escHtml(q.exp)+'</div>';
+    html+='</div>';
+  });
+  document.getElementById('reviewList').innerHTML=html;
+  showScreen('scrResults');
+}
+
+function retry(){
+  state.curQ=0;
+  state.selected=new Array(10).fill(-1);
+  state.times=new Array(10).fill(0);
+  showScreen('scrCats');
+}
+
+function escHtml(s){
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>
