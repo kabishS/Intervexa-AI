@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Intervexa AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@300;400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+<style>
+:root{--bg:#080A0F;--bg2:#0D1117;--bg3:#111820;--panel:rgba(255,255,255,0.03);--border:rgba(255,255,255,0.07);--accent:#00E5FF;--accent2:#7B61FF;--accent3:#FF6B6B;--text:#F0F4FF;--muted:#5A6480;--muted2:#8A94B0;--green:#00FFB3}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;overflow-x:hidden;line-height:1.6}
+.orb{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0}
+.orb1{width:600px;height:600px;background:var(--accent2);top:-200px;left:-200px;opacity:.12}
+.orb2{width:500px;height:500px;background:var(--accent);bottom:100px;right:-150px;opacity:.1}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 60px;display:flex;align-items:center;justify-content:space-between;background:rgba(8,10,15,.8);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:10px;font-size:1.25rem;font-weight:800;letter-spacing:-.02em;text-decoration:none;color:var(--text);cursor:pointer}
+.logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:10px;display:grid;place-items:center;font-size:1rem}
+.logo span{color:var(--accent)}
+nav ul{display:flex;gap:36px;list-style:none}
+nav ul a{text-decoration:none;color:var(--muted2);font-size:.875rem;font-weight:500;transition:color .2s;cursor:pointer}
+nav ul a:hover{color:var(--text)}
+.nav-cta{display:flex;gap:12px;align-items:center}
+.btn-ghost{padding:9px 20px;border:1px solid var(--border);border-radius:8px;background:transparent;color:var(--muted2);font-family:'Syne',sans-serif;font-size:.875rem;font-weight:500;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-block}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+.btn-primary{padding:9px 22px;background:var(--accent);border:none;border-radius:8px;color:#080A0F;font-family:'Syne',sans-serif;font-size:.875rem;font-weight:700;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-block}
+.btn-primary:hover{background:#fff;box-shadow:0 0 30px rgba(0,229,255,.4);transform:translateY(-1px)}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:140px 60px 100px;position:relative;z-index:1;text-align:center}
+.hero-inner{max-width:900px}
+.badge{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border:1px solid rgba(0,229,255,.25);border-radius:100px;background:rgba(0,229,255,.05);font-family:'DM Mono',monospace;font-size:.75rem;color:var(--accent);letter-spacing:.05em;margin-bottom:32px;animation:fadeUp .8s ease both}
+.bdot{width:6px;height:6px;background:var(--accent);border-radius:50%;animation:pulse 2s ease infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
+.hero h1{font-size:clamp(3rem,7vw,6rem);font-weight:800;line-height:1.0;letter-spacing:-.04em;margin-bottom:12px;animation:fadeUp .8s ease .1s both}
+.hero h1 em{font-style:italic;font-family:'Instrument Serif',serif;color:var(--accent)}
+.hero-sub{font-size:clamp(1rem,2vw,1.25rem);color:var(--muted2);max-width:600px;margin:24px auto 40px;line-height:1.7;animation:fadeUp .8s ease .2s both}
+.hero-actions{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;animation:fadeUp .8s ease .3s both}
+.btn-xl{padding:16px 36px;font-size:1rem;font-weight:700;border-radius:12px}
+.btn-xl-ghost{padding:16px 36px;font-size:1rem;border-radius:12px;border:1px solid var(--border);background:transparent;color:var(--muted2);font-family:'Syne',sans-serif;font-weight:600;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px}
+.btn-xl-ghost:hover{border-color:rgba(255,255,255,.3);color:var(--text)}
+.hero-stats{display:flex;justify-content:center;gap:48px;margin-top:80px;padding-top:48px;border-top:1px solid var(--border);animation:fadeUp .8s ease .4s both}
+.stat{text-align:center}
+.stat-num{font-size:2rem;font-weight:800;letter-spacing:-.03em;display:block}
+.stat-num span{color:var(--accent)}
+.stat-label{font-size:.8rem;color:var(--muted);letter-spacing:.05em;text-transform:uppercase;margin-top:4px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+
+/* SECTIONS */
+.psec{position:relative;z-index:1;padding:80px 60px}
+.slabel{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;margin-bottom:16px}
+.stitle{font-size:clamp(2rem,4vw,3rem);font-weight:800;letter-spacing:-.03em;line-height:1.1;margin-bottom:16px}
+.stitle em{font-style:italic;font-family:'Instrument Serif',serif;color:var(--accent2)}
+.ssub{color:var(--muted2);line-height:1.7}
+.tc{text-align:center}.mxa{margin-left:auto;margin-right:auto}.max600{max-width:600px}
+.steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;max-width:1000px;margin:60px auto 0}
+.step-card{padding:40px 32px;background:var(--bg2);border:1px solid var(--border);transition:background .3s}
+.step-card:first-child{border-radius:20px 0 0 20px}.step-card:last-child{border-radius:0 20px 20px 0}
+.step-card:hover{background:var(--bg3)}
+.snum{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--muted);letter-spacing:.08em;margin-bottom:20px;display:block}
+.sicon{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;font-size:1.4rem;margin-bottom:20px;border:1px solid var(--border)}
+.si1{background:rgba(0,229,255,.08);border-color:rgba(0,229,255,.2)}.si2{background:rgba(123,97,255,.08);border-color:rgba(123,97,255,.2)}.si3{background:rgba(0,255,179,.08);border-color:rgba(0,255,179,.2)}
+.stept{font-size:1.1rem;font-weight:700;margin-bottom:10px}
+.stepd{font-size:.875rem;color:var(--muted2);line-height:1.7}
+.feat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;max-width:1000px;margin:60px auto 0}
+.feat-card{padding:28px;background:var(--bg2);border:1px solid var(--border);border-radius:18px;transition:all .3s}
+.feat-card:hover{border-color:rgba(0,229,255,.2);transform:translateY(-3px);box-shadow:0 16px 48px rgba(0,0,0,.4)}
+.ficon{font-size:1.8rem;margin-bottom:14px;display:block}.ftitle{font-size:1rem;font-weight:700;margin-bottom:8px}.fdesc{font-size:.85rem;color:var(--muted2);line-height:1.7}
+.price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:1000px;margin:60px auto 0}
+.pcard{padding:32px 28px;background:var(--bg2);border:1px solid var(--border);border-radius:20px}
+.pcard.featured{background:linear-gradient(135deg,rgba(0,229,255,.06),rgba(123,97,255,.06));border-color:rgba(0,229,255,.3);transform:scale(1.04);box-shadow:0 0 60px rgba(0,229,255,.1)}
+.pbadge{display:inline-block;padding:4px 10px;background:var(--accent);color:#080A0F;border-radius:6px;font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:18px}
+.pname{font-size:1rem;font-weight:700;color:var(--muted2);margin-bottom:6px}.pprice{font-size:2.4rem;font-weight:800;letter-spacing:-.04em;margin-bottom:4px}
+.pprice span{font-size:.9rem;font-weight:400;color:var(--muted)}.pperiod{font-size:.75rem;color:var(--muted);margin-bottom:24px}
+.pdiv{height:1px;background:var(--border);margin:20px 0}
+.pfeats{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
+.pfeats li{display:flex;align-items:center;gap:8px;font-size:.85rem;color:var(--muted2)}
+.ck{color:var(--green)}.cx{color:var(--muted)}
+.cta-sec{padding:80px 60px 100px;position:relative;z-index:1}
+.cta-box{max-width:800px;margin:0 auto;text-align:center;padding:80px 60px;background:var(--bg2);border:1px solid var(--border);border-radius:32px;position:relative;overflow:hidden}
+.cta-box::before{content:'';position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:400px;height:300px;background:radial-gradient(ellipse,rgba(0,229,255,.1),transparent 70%)}
+.cta-box h2{font-size:clamp(2rem,4vw,3.5rem);font-weight:800;letter-spacing:-.04em;line-height:1.05;margin-bottom:14px;position:relative}
+.cta-box h2 em{font-style:italic;font-family:'Instrument Serif',serif;color:var(--accent)}
+.cta-box p{color:var(--muted2);margin-bottom:32px;position:relative}
+.cta-btns{display:flex;gap:14px;justify-content:center;position:relative}
+footer{border-top:1px solid var(--border);padding:40px 60px;display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1}
+.flogo{display:flex;align-items:center;gap:8px;font-weight:800}
+.fli{width:28px;height:28px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:8px;display:grid;place-items:center;font-size:.875rem}
+.flinks{display:flex;gap:24px;list-style:none}
+.flinks a{text-decoration:none;color:var(--muted);font-size:.8rem;transition:color .2s}
+.flinks a:hover{color:var(--text)}.fcopy{font-size:.75rem;color:var(--muted);font-family:'DM Mono',monospace}
+
+/* ═══════════════════════════ API KEY SCREEN ═══════════════════════════ */
+.apikey-scr{padding:36px 44px;display:flex;flex-direction:column;gap:24px;overflow-y:auto}
+.apikey-icon{width:72px;height:72px;background:linear-gradient(135deg,var(--accent2),var(--accent));border-radius:20px;display:grid;place-items:center;font-size:2rem;margin:0 auto}
+.apikey-title{font-size:1.5rem;font-weight:800;letter-spacing:-.03em}
+.apikey-title span{color:var(--accent);font-family:'Instrument Serif',serif;font-style:italic}
+.apikey-desc{color:var(--muted2);font-size:.875rem;line-height:1.7;max-width:420px}
+.apikey-field{width:100%;max-width:460px;display:flex;flex-direction:column;gap:8px;text-align:left}
+.apikey-field label{font-family:'DM Mono',monospace;font-size:.68rem;color:var(--accent);letter-spacing:.1em;text-transform:uppercase}
+.apikey-input-wrap{position:relative;display:flex;align-items:center}
+.apikey-input{width:100%;padding:13px 46px 13px 16px;background:var(--bg3);border:1px solid var(--border);border-radius:11px;color:var(--text);font-family:'DM Mono',monospace;font-size:.875rem;outline:none;transition:border-color .2s;letter-spacing:.04em}
+.apikey-input:focus{border-color:rgba(0,229,255,.4)}
+.apikey-input.error{border-color:rgba(255,107,107,.5)!important}
+.apikey-toggle{position:absolute;right:12px;background:none;border:none;color:var(--muted2);cursor:pointer;font-size:.9rem;padding:4px;transition:color .2s}
+.apikey-toggle:hover{color:var(--text)}
+.apikey-hint{font-size:.72rem;color:var(--muted);line-height:1.5}
+.apikey-hint a{color:var(--accent);text-decoration:none}
+.apikey-hint a:hover{text-decoration:underline}
+.apikey-secure{display:flex;align-items:center;gap:8px;padding:11px 14px;background:rgba(0,255,179,.04);border:1px solid rgba(0,255,179,.15);border-radius:10px;font-size:.78rem;color:var(--muted2);max-width:460px;width:100%}
+.apikey-err{font-size:.78rem;color:var(--accent3);display:none;margin-top:-8px}
+.apikey-err.show{display:block}
+.apikey-btn{width:100%;max-width:460px;padding:14px;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:12px;color:#080A0F;font-family:'Syne',sans-serif;font-size:.95rem;font-weight:800;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:9px}
+.apikey-btn:hover{transform:translateY(-2px);box-shadow:0 14px 40px rgba(0,229,255,.25)}
+.apikey-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.key-saved-badge{display:none;align-items:center;gap:7px;padding:5px 12px;background:rgba(0,255,179,.1);border:1px solid rgba(0,255,179,.25);border-radius:20px;font-size:.72rem;color:var(--green);font-family:'DM Mono',monospace;letter-spacing:.05em}
+.key-saved-badge.show{display:flex}
+.guide-step{display:flex;gap:12px;align-items:flex-start}
+.guide-num{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--accent2),var(--accent));display:grid;place-items:center;font-size:.72rem;font-weight:800;color:#080A0F;flex-shrink:0;margin-top:2px}
+.guide-text{font-size:.8rem;color:var(--muted2);line-height:1.6}
+.guide-text strong{color:var(--text)}
+/* Provider cards */
+.provider-card{padding:14px 10px;background:var(--bg3);border:1px solid var(--border);border-radius:14px;cursor:pointer;transition:all .2s;text-align:center;display:flex;flex-direction:column;align-items:center;gap:5px}
+.provider-card:hover{border-color:rgba(0,229,255,.3);background:rgba(0,229,255,.04)}
+.provider-card.active{border-color:var(--accent);background:rgba(0,229,255,.07);box-shadow:0 0 20px rgba(0,229,255,.1)}
+.provider-logo{font-size:1.5rem;line-height:1}
+.provider-name{font-size:.82rem;font-weight:700;color:var(--text)}
+.provider-tag{font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:10px}
+.provider-tag.free{background:rgba(0,255,179,.12);color:var(--green);border:1px solid rgba(0,255,179,.25)}
+.provider-tag.paid{background:rgba(255,107,107,.1);color:var(--accent3);border:1px solid rgba(255,107,107,.2)}
+.provider-desc{font-size:.68rem;color:var(--muted);line-height:1.3}
+
+/* ═══════════════════════════ MODAL ═══════════════════════════ */
+.modal-overlay{position:fixed;inset:0;z-index:2000;background:rgba(4,6,10,.96);backdrop-filter:blur(12px);display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.i-modal{width:100%;max-width:980px;background:var(--bg2);border:1px solid rgba(0,229,255,.15);border-radius:28px;overflow:hidden;box-shadow:0 60px 160px rgba(0,0,0,.8);display:flex;flex-direction:column;max-height:92vh;animation:slideUp .4s cubic-bezier(.22,.68,0,1.2)}
+@keyframes slideUp{from{opacity:0;transform:translateY(40px) scale(.97)}to{opacity:1;transform:none}}
+.prog-wrap{height:3px;background:var(--border);flex-shrink:0}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));transition:width .6s ease}
+.close-btn{width:36px;height:36px;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--muted2);cursor:pointer;font-size:1rem;display:grid;place-items:center;transition:all .2s;flex-shrink:0}
+.close-btn:hover{border-color:var(--accent3);color:var(--accent3)}
+
+/* ── SETUP SCREEN ── */
+.setup-scr{padding:44px;display:flex;flex-direction:column;gap:24px;overflow-y:auto}
+.setup-hdr{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+.setup-ttl{font-size:1.55rem;font-weight:800;letter-spacing:-.03em}
+.setup-ttl span{color:var(--accent);font-style:italic;font-family:'Instrument Serif',serif}
+
+/* Mode toggle */
+.mode-toggle{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--border);border-radius:14px;overflow:hidden;background:var(--bg3)}
+.mode-btn{padding:14px 18px;border:none;background:transparent;color:var(--muted2);font-family:'Syne',sans-serif;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:12px}
+.mode-btn.active{background:linear-gradient(135deg,rgba(0,229,255,.1),rgba(123,97,255,.1));color:var(--text);box-shadow:inset 0 0 0 1px rgba(0,229,255,.25)}
+.mode-icon{font-size:1.4rem;flex-shrink:0}
+.mode-name{font-size:.9rem;font-weight:700;display:block;line-height:1.2}
+.mode-desc{font-size:.7rem;color:var(--muted);display:block;line-height:1.3}
+.mode-btn.active .mode-desc{color:var(--muted2)}
+
+.setup-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.sfield{display:flex;flex-direction:column;gap:7px}
+.sfield label{font-size:.68rem;font-family:'DM Mono',monospace;color:var(--accent);letter-spacing:.08em;text-transform:uppercase}
+.sfield select,.sfield input{padding:11px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Syne',sans-serif;font-size:.875rem;outline:none;transition:border-color .2s;appearance:none}
+.sfield select:focus,.sfield input:focus{border-color:rgba(0,229,255,.4)}
+.sfield select option{background:#0D1117}
+.info-box{padding:13px 16px;background:rgba(0,229,255,.04);border:1px solid rgba(0,229,255,.12);border-radius:10px;font-size:.8rem;color:var(--muted2);line-height:1.6}
+.start-btn{padding:15px;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:12px;color:#080A0F;font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px}
+.start-btn:hover{transform:translateY(-2px);box-shadow:0 16px 48px rgba(0,229,255,.25)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+
+/* ── SHARED TOPBAR ── */
+.i-topbar{display:flex;align-items:center;justify-content:space-between;padding:13px 22px;background:var(--bg3);border-bottom:1px solid var(--border);flex-shrink:0;gap:12px}
+.i-info{display:flex;align-items:center;gap:12px;min-width:0}
+.i-status{display:flex;align-items:center;gap:6px;font-size:.72rem;font-family:'DM Mono',monospace;flex-shrink:0}
+.sdot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;flex-shrink:0}
+.i-role-lbl{font-size:.72rem;color:var(--muted2);font-family:'DM Mono',monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.qctr{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--muted2);flex-shrink:0}
+.mode-tag{padding:3px 10px;border-radius:20px;font-size:.65rem;font-family:'DM Mono',monospace;font-weight:600;letter-spacing:.06em;text-transform:uppercase;flex-shrink:0}
+.mode-tag.chat{background:rgba(0,229,255,.12);color:var(--accent);border:1px solid rgba(0,229,255,.25)}
+.mode-tag.voice{background:rgba(123,97,255,.12);color:var(--accent2);border:1px solid rgba(123,97,255,.25)}
+
+/* ── SHARED AI PANEL ── */
+.i-body{display:grid;grid-template-columns:1fr 1.1fr;flex:1;overflow:hidden;min-height:0}
+.ai-col{padding:22px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:14px;overflow-y:auto}
+.ai-head{display:flex;align-items:center;gap:11px;flex-shrink:0}
+.ai-ava{width:44px;height:44px;background:linear-gradient(135deg,var(--accent2),var(--accent));border-radius:12px;display:grid;place-items:center;font-size:1.2rem;flex-shrink:0}
+.ai-nm{font-size:.875rem;font-weight:700}
+.ai-rl{font-size:.7rem;color:var(--muted2);font-family:'DM Mono',monospace}
+.qlabel{font-family:'DM Mono',monospace;font-size:.62rem;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:7px}
+.qbox{padding:16px;background:rgba(0,229,255,.04);border:1px solid rgba(0,229,255,.15);border-radius:12px;min-height:80px}
+.qtext{font-size:.925rem;font-weight:600;line-height:1.65;color:var(--text);min-height:32px}
+.thinking{display:flex;align-items:center;gap:7px;color:var(--muted2);font-size:.82rem}
+.tdots span{animation:blink 1.4s infinite;display:inline-block;width:5px;height:5px;background:var(--accent);border-radius:50%;margin:0 2px}
+.tdots span:nth-child(2){animation-delay:.2s}.tdots span:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,80%,100%{opacity:.2;transform:scale(.8)}40%{opacity:1;transform:scale(1.2)}}
+.waveform{display:flex;align-items:flex-end;gap:3px;height:30px}
+.wbar{width:4px;background:var(--accent);border-radius:2px;opacity:.15;height:5px}
+.wbar.wact{animation:wave 1.2s ease-in-out infinite;opacity:.85}
+.wbar:nth-child(2n).wact{animation-delay:.15s}.wbar:nth-child(3n).wact{animation-delay:.3s}.wbar:nth-child(4n).wact{animation-delay:.1s}.wbar:nth-child(5n).wact{animation-delay:.25s}
+@keyframes wave{0%,100%{height:4px}50%{height:24px}}
+.fb-box{padding:11px 13px;background:rgba(0,255,179,.04);border:1px solid rgba(0,255,179,.15);border-radius:10px;display:none}
+.fb-box.show{display:block;animation:fadeUp .4s ease}
+.fblbl{font-family:'DM Mono',monospace;font-size:.62rem;color:var(--green);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px}
+.fbtext{font-size:.8rem;color:var(--muted2);line-height:1.6}
+.score-chips{display:flex;gap:7px;flex-shrink:0}
+.chip{flex:1;padding:9px 5px;border-radius:9px;background:var(--panel);border:1px solid var(--border);text-align:center}
+.chip .val{font-size:1.05rem;font-weight:800;display:block}.chip .lbl{font-size:.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.chipc .val{color:var(--green)}.chipd .val{color:var(--accent)}.chips .val{color:var(--accent2)}
+
+/* ── CHAT MODE USER PANEL ── */
+.chat-col{padding:22px;display:flex;flex-direction:column;gap:13px;overflow-y:auto}
+.ans-area{padding:13px;background:var(--bg3);border:1px solid var(--border);border-radius:11px;min-height:100px;resize:none;width:100%;color:var(--text);font-family:'Syne',sans-serif;font-size:.875rem;outline:none;line-height:1.6;transition:border-color .2s}
+.ans-area:focus{border-color:rgba(0,229,255,.35)}
+.ans-area::placeholder{color:var(--muted)}
+.ans-actions{display:flex;gap:9px}
+.sub-btn{flex:1;padding:11px;background:var(--accent);border:none;border-radius:9px;color:#080A0F;font-family:'Syne',sans-serif;font-weight:700;font-size:.85rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:7px}
+.sub-btn:hover{background:#fff;box-shadow:0 0 24px rgba(0,229,255,.3)}
+.sub-btn:disabled{opacity:.4;cursor:not-allowed}
+.nxt-btn{padding:11px 16px;background:var(--panel);border:1px solid var(--border);border-radius:9px;color:var(--muted2);font-family:'Syne',sans-serif;font-weight:600;font-size:.85rem;cursor:pointer;transition:all .2s}
+.nxt-btn:hover{border-color:var(--accent2);color:var(--accent2)}
+.nxt-btn:disabled{opacity:.3;cursor:not-allowed}
+.trans-area{flex:1;min-height:100px;max-height:190px;overflow-y:auto;padding:13px;background:var(--bg3);border:1px solid var(--border);border-radius:11px;font-size:.82rem;color:var(--muted2);line-height:1.7}
+.trans-area::-webkit-scrollbar{width:3px}.trans-area::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.tph{color:var(--muted);font-style:italic;font-size:.78rem}
+
+/* ── VOICE MODE USER PANEL ── */
+.voice-col{padding:22px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:18px;overflow-y:auto}
+.voice-avatar-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;padding-top:8px}
+.voice-avatar{position:relative;width:88px;height:88px;border-radius:50%;background:linear-gradient(135deg,var(--accent2),var(--accent));display:grid;place-items:center;font-size:2rem;flex-shrink:0;transition:box-shadow .3s}
+.voice-avatar.ai-speaking{box-shadow:0 0 0 8px rgba(0,229,255,.1),0 0 0 18px rgba(0,229,255,.05);animation:aiPulse 1.2s ease-in-out infinite}
+@keyframes aiPulse{0%,100%{box-shadow:0 0 0 8px rgba(0,229,255,.1),0 0 0 18px rgba(0,229,255,.05)}50%{box-shadow:0 0 0 14px rgba(0,229,255,.15),0 0 0 28px rgba(0,229,255,.07)}}
+.voice-status-lbl{font-size:.68rem;font-family:'DM Mono',monospace;color:var(--accent);letter-spacing:.1em;text-transform:uppercase}
+.voice-transcript-box{width:100%;padding:13px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:11px;min-height:72px;font-size:.875rem;color:var(--muted2);line-height:1.6;transition:border-color .2s}
+.voice-transcript-box.listening{border-color:rgba(255,107,107,.4);background:rgba(255,107,107,.03);color:var(--text)}
+.voice-transcript-box .tph{color:var(--muted);font-style:italic;font-size:.78rem}
+.mic-row{display:flex;flex-direction:column;align-items:center;gap:10px;width:100%}
+.mic-btn{width:66px;height:66px;border-radius:50%;border:none;background:linear-gradient(135deg,var(--accent2),var(--accent));cursor:pointer;font-size:1.6rem;display:grid;place-items:center;transition:all .25s;box-shadow:0 6px 28px rgba(0,229,255,.2)}
+.mic-btn:hover:not(:disabled){transform:scale(1.07);box-shadow:0 10px 36px rgba(0,229,255,.35)}
+.mic-btn.recording{background:linear-gradient(135deg,#FF6B6B,#FF9A3C);box-shadow:0 6px 28px rgba(255,107,107,.3);animation:micPulse 1s ease-in-out infinite}
+@keyframes micPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+.mic-btn:disabled{opacity:.35;cursor:not-allowed;animation:none}
+.mic-hint{font-size:.7rem;color:var(--muted);font-family:'DM Mono',monospace;letter-spacing:.05em}
+.voice-btn-row{display:flex;gap:9px;width:100%}
+.v-sub-btn{flex:1;padding:11px;background:var(--accent);border:none;border-radius:9px;color:#080A0F;font-family:'Syne',sans-serif;font-weight:700;font-size:.82rem;cursor:pointer;transition:all .2s;display:none}
+.v-sub-btn.show{display:block}
+.v-sub-btn:hover{background:#fff;box-shadow:0 0 20px rgba(0,229,255,.3)}
+.v-nxt-btn{flex:1;padding:11px;background:var(--panel);border:1px solid var(--border);border-radius:9px;color:var(--muted2);font-family:'Syne',sans-serif;font-weight:600;font-size:.82rem;cursor:pointer;transition:all .2s;display:none}
+.v-nxt-btn.show{display:block}
+.v-nxt-btn:hover{border-color:var(--accent2);color:var(--accent2)}
+.voice-trans{width:100%;max-height:160px;overflow-y:auto;display:flex;flex-direction:column;gap:8px}
+.voice-trans::-webkit-scrollbar{width:3px}.voice-trans::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+
+/* ── INTERVIEW SCREENS ── */
+.int-scr{display:none;flex-direction:column;height:86vh}
+.int-scr.active{display:flex}
+
+/* ── RESULTS ── */
+.res-scr{display:none;padding:32px 40px;overflow-y:auto;max-height:90vh}
+.res-scr.active{display:block;animation:fadeUp .5s ease}
+.res-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
+.res-ttl{font-size:1.45rem;font-weight:800;letter-spacing:-.03em}
+.res-ttl span{color:var(--green);font-family:'Instrument Serif',serif;font-style:italic}
+.overall{display:flex;align-items:center;gap:18px;padding:22px;background:var(--bg3);border:1px solid rgba(0,229,255,.2);border-radius:16px;margin-bottom:20px;flex-wrap:wrap}
+.big-sc{font-size:3.2rem;font-weight:800;letter-spacing:-.04em;color:var(--accent);line-height:1}
+.big-sc span{font-size:1.1rem;color:var(--muted)}
+.scbk{display:flex;gap:9px;flex-wrap:wrap;flex:1}
+.sbchip{flex:1;min-width:78px;padding:11px 7px;background:var(--panel);border:1px solid var(--border);border-radius:11px;text-align:center}
+.sbchip .v{font-size:1.25rem;font-weight:800;display:block}.sbchip .l{font-size:.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-top:2px}
+.sb1 .v{color:var(--green)}.sb2 .v{color:var(--accent)}.sb3 .v{color:var(--accent2)}.sb4 .v{color:var(--accent3)}
+.qa-list{display:flex;flex-direction:column;gap:14px;margin-bottom:22px}
+.qa-item{padding:16px;background:var(--bg3);border:1px solid var(--border);border-radius:13px}
+.qa-q{font-size:.72rem;font-family:'DM Mono',monospace;color:var(--accent);margin-bottom:5px}
+.qa-a{font-size:.83rem;color:var(--muted2);line-height:1.6;margin-bottom:9px}
+.qa-fb{font-size:.78rem;color:var(--green);background:rgba(0,255,179,.05);border:1px solid rgba(0,255,179,.15);padding:8px 11px;border-radius:8px;line-height:1.6}
+.res-actions{display:flex;gap:11px;justify-content:center;margin-top:8px}
+
+@media(max-width:768px){
+  nav{padding:16px 24px}nav ul{display:none}
+  .hero{padding:120px 24px 80px}.hero-stats{gap:20px;flex-wrap:wrap}
+  .psec{padding:60px 24px}
+  .steps-grid,.feat-grid,.price-grid{grid-template-columns:1fr}
+  .step-card{border-radius:16px!important}.pcard.featured{transform:none}
+  .setup-grid{grid-template-columns:1fr}
+  .i-body{grid-template-columns:1fr}
+  .ai-col{border-right:none;border-bottom:1px solid var(--border);max-height:230px}
+  .i-modal{max-height:95vh}
+  footer{flex-direction:column;gap:18px;text-align:center;padding:28px 24px}
+  .flinks{flex-wrap:wrap;justify-content:center}
+  .cta-box{padding:44px 22px}.cta-btns{flex-direction:column;align-items:center}
+  .res-scr{padding:22px 18px}.overall{flex-direction:column;align-items:flex-start}
+  .apikey-scr{padding:24px 20px}
+  .apikey-scr > div:nth-child(2){grid-template-columns:1fr!important}
+}
+</style>
+</head>
+<body>
+<div class="orb orb1"></div><div class="orb orb2"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="logo" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+    <div class="logo-icon">⚡</div>Intervexa <span>AI</span>
+  </div>
+  <ul>
+    <li><a onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">How It Works</a></li>
+    <li><a onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">Features</a></li>
+    <li><a onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Pricing</a></li>
+    <li><a href="aptitude.html" onclick="document.getElementById('aptitude').scrollIntoView({behavior:'smooth'})">aptitude</a></li>
+    <li><a href="coding.html" onclick="document.getElementById('aptitude').scrollIntoView({behavior:'smooth'})">coding</a></li>
+  </ul>
+  <div class="nav-cta">
+    <button class="btn-ghost" onclick="window.location.href='index.html'">LogOut</button>
+    <button class="btn-primary"  href="index.html" onclick="openModal()">Start Free</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="badge"><span class="bdot"></span>AI-Powered Mock Interviews · Now Live</div>
+    <h1>Ace Every Interview<br>with <em>Intelligent</em> Practice</h1>
+    <p class="hero-sub">Intervexa AI conducts realistic mock interviews — by chat or voice — gives real-time feedback, and helps you land your dream job.</p>
+    <div class="hero-actions">
+      <button class="btn-primary btn-xl" onclick="openModal()">Start Mock Interview →</button>
+      <button class="btn-xl-ghost">▶ &nbsp;Watch Demo</button>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num">50<span>K+</span></span><div class="stat-label">Interviews Done</div></div>
+      <div class="stat"><span class="stat-num">94<span>%</span></span><div class="stat-label">Success Rate</div></div>
+      <div class="stat"><span class="stat-num">200<span>+</span></span><div class="stat-label">Job Roles</div></div>
+      <div class="stat"><span class="stat-num">4.9<span>★</span></span><div class="stat-label">User Rating</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="psec" id="how">
+  <div class="tc"><div class="slabel">Process</div><h2 class="stitle">From Zero to <em>Interview-Ready</em></h2><p class="ssub max600 mxa">Three simple steps to transform how you prepare.</p></div>
+  <div class="steps-grid">
+    <div class="step-card"><span class="snum">01 / SETUP</span><div class="sicon si1">🎯</div><div class="stept">Choose Your Role</div><p class="stepd">Select from 200+ job roles and set your target companies and experience level.</p></div>
+    <div class="step-card"><span class="snum">02 / PRACTICE</span><div class="sicon si2">🤖</div><div class="stept">Interview with AI</div><p class="stepd">Talk or type — our AI adapts every question based on your actual answers in real time.</p></div>
+    <div class="step-card"><span class="snum">03 / IMPROVE</span><div class="sicon si3">📈</div><div class="stept">Get Deep Feedback</div><p class="stepd">Receive a comprehensive report with scores, transcripts, and personalized improvement tips.</p></div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="psec" id="features" style="background:linear-gradient(180deg,transparent,rgba(123,97,255,.04),transparent)">
+  <div class="tc"><div class="slabel">Features</div><h2 class="stitle">Everything You Need to <em>Win</em></h2><p class="ssub max600 mxa">Built for job seekers who are serious about landing their next role.</p></div>
+  <div class="feat-grid">
+    <div class="feat-card"><span class="ficon">🤖</span><div class="ftitle">Real AI Conversations</div><p class="fdesc">Powered by Claude AI — asks dynamic follow-up questions, reacts to what you actually say, and conducts a genuinely challenging session.</p></div>
+    <div class="feat-card"><span class="ficon">🎤</span><div class="ftitle">Chat & Voice Modes</div><p class="fdesc">Type your answers or speak them aloud. The AI reads your answers back and listens via your microphone — just like a real interview.</p></div>
+    <div class="feat-card"><span class="ficon">💬</span><div class="ftitle">Instant Per-Answer Feedback</div><p class="fdesc">After each answer, AI evaluates your clarity, depth, and STAR structure with specific, actionable suggestions.</p></div>
+    <div class="feat-card"><span class="ficon">📊</span><div class="ftitle">Detailed Score Reports</div><p class="fdesc">Full session report with per-question scores, overall performance metrics, and a personalized improvement plan.</p></div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="psec" id="pricing">
+  <div class="tc"><div class="slabel">Pricing</div><h2 class="stitle">Simple, <em>Transparent</em> Pricing</h2><p class="ssub max600 mxa">Start free. Upgrade when you're ready.</p></div>
+  <div class="price-grid">
+    <div class="pcard"><div class="pname">Starter</div><div class="pprice">$0<span>/mo</span></div><div class="pperiod">Forever free</div><div class="pdiv"></div><ul class="pfeats"><li><span class="ck">✓</span> 3 mock interviews/month</li><li><span class="ck">✓</span> Chat & Voice modes</li><li><span class="ck">✓</span> 50+ job roles</li><li><span class="cx">—</span> Real-time suggestions</li><li><span class="cx">—</span> Skill analytics</li></ul><button class="btn-ghost" style="width:100%;padding:11px;text-align:center;">Get Started Free</button></div>
+    <div class="pcard featured"><div class="pbadge">Most Popular</div><div class="pname">Pro</div><div class="pprice">$19<span>/mo</span></div><div class="pperiod">Cancel anytime</div><div class="pdiv"></div><ul class="pfeats"><li><span class="ck">✓</span> Unlimited interviews</li><li><span class="ck">✓</span> Real-time AI feedback</li><li><span class="ck">✓</span> 200+ job roles</li><li><span class="ck">✓</span> Skill analytics</li><li><span class="cx">—</span> Human mentors</li></ul><button class="btn-primary" style="width:100%;padding:13px;" onclick="openModal()">Start Pro Trial</button></div>
+    <div class="pcard"><div class="pname">Teams</div><div class="pprice">$49<span>/mo</span></div><div class="pperiod">Per seat · Min 5</div><div class="pdiv"></div><ul class="pfeats"><li><span class="ck">✓</span> Everything in Pro</li><li><span class="ck">✓</span> Human mentor sessions</li><li><span class="ck">✓</span> Team analytics</li><li><span class="ck">✓</span> Custom question banks</li><li><span class="ck">✓</span> Priority support</li></ul><button class="btn-ghost" style="width:100%;padding:11px;text-align:center;">Contact Sales</button></div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-sec">
+  <div class="cta-box">
+    <h2>Ready to <em>Ace</em> Your<br>Next Interview?</h2>
+    <p>Join 50,000+ job seekers who transformed their performance with Intervexa AI.</p>
+    <div class="cta-btns"><button class="btn-primary btn-xl" onclick="openModal()">Start Free Today →</button><button class="btn-xl-ghost">Book a Demo</button></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="flogo"><div class="fli">⚡</div> Intervexa <span style="color:var(--accent)">AI</span></div>
+  <ul class="flinks"><li><a href="#">Privacy</a></li><li><a href="#">Terms</a></li><li><a href="#">Blog</a></li><li><a href="#">Careers</a></li></ul>
+  <div class="fcopy">© 2026 Intervexa AI</div>
+</footer>
+
+<!-- ══════════════════════════ MODAL ══════════════════════════ -->
+<div class="modal-overlay" id="modalOverlay">
+ <div class="i-modal">
+  <div class="prog-wrap"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+
+  <!-- ── API KEY SCREEN ── -->
+  <div class="apikey-scr" id="apikeyScr">
+
+    <!-- Header -->
+    <div style="display:flex;align-items:center;justify-content:space-between;width:100%">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div class="apikey-icon">🔑</div>
+        <div>
+          <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px">Step 1 of 2</div>
+          <div class="apikey-title">Choose Your <span>AI Provider</span></div>
+        </div>
+      </div>
+      <button class="close-btn" onclick="closeModal()">✕</button>
+    </div>
+
+    <!-- Provider cards -->
+    <div>
+      <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px">Select Provider</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px" id="providerGrid">
+
+        <div class="provider-card active" id="pcard-groq" onclick="selectProvider('groq')">
+          <div class="provider-logo">⚡</div>
+          <div class="provider-name">Groq</div>
+          <div class="provider-tag free">FREE</div>
+          <div class="provider-desc">Ultra fast · Llama 3</div>
+        </div>
+
+        <div class="provider-card" id="pcard-gemini" onclick="selectProvider('gemini')">
+          <div class="provider-logo">🌀</div>
+          <div class="provider-name">Gemini</div>
+          <div class="provider-tag free">FREE</div>
+          <div class="provider-desc">Google AI · Gemini 2.0</div>
+        </div>
+
+        <div class="provider-card" id="pcard-openrouter" onclick="selectProvider('openrouter')">
+          <div class="provider-logo">🔀</div>
+          <div class="provider-name">OpenRouter</div>
+          <div class="provider-tag free">FREE</div>
+          <div class="provider-desc">Many free models</div>
+        </div>
+
+        <div class="provider-card" id="pcard-anthropic" onclick="selectProvider('anthropic')">
+          <div class="provider-logo">🤖</div>
+          <div class="provider-name">Anthropic</div>
+          <div class="provider-tag paid">PAID</div>
+          <div class="provider-desc">Claude · Best quality</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Two column: guide + input -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;width:100%">
+
+      <!-- LEFT: How to get key (dynamic per provider) -->
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--accent);letter-spacing:.1em;text-transform:uppercase">How to get your free key</div>
+        <div id="providerGuide" style="display:flex;flex-direction:column;gap:9px"></div>
+        <div id="providerNote" style="padding:10px 13px;border-radius:10px;font-size:.75rem;line-height:1.6"></div>
+      </div>
+
+      <!-- RIGHT: Key input -->
+      <div style="display:flex;flex-direction:column;gap:14px;justify-content:center">
+        <div class="apikey-field">
+          <label id="keyLabel">Groq API Key</label>
+          <div class="apikey-input-wrap">
+            <input class="apikey-input" type="password" id="apikeyInput" placeholder="" oninput="onKeyInput()" onkeydown="if(event.key==='Enter')saveKey()">
+            <button class="apikey-toggle" onclick="toggleKeyVis()" id="keyToggle" title="Show/hide">👁</button>
+          </div>
+          <div class="apikey-err" id="apikeyErr">⚠ Key too short — paste your full API key</div>
+        </div>
+
+        <div class="apikey-secure">
+          <span style="font-size:1.1rem">🔒</span>
+          <div style="font-size:.75rem;line-height:1.55">
+            <strong style="color:var(--text)">Memory only.</strong> Never saved. Sent only to your chosen provider's API.
+          </div>
+        </div>
+
+        <div class="key-saved-badge" id="keySavedBadge"><span>●</span> Connected</div>
+
+        <button class="apikey-btn" id="apikeyBtn" onclick="saveKey()" disabled>
+          <span id="apikeyBtnTxt">Connect & Continue →</span>
+        </button>
+
+        <div style="text-align:center;font-size:.72rem;color:var(--muted)" id="signupLink"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── SETUP SCREEN ── -->
+  <div class="setup-scr" id="setupScr">
+    <div class="setup-hdr">
+      <div>
+        <div style="font-family:'DM Mono',monospace;font-size:.68rem;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:7px">New Session</div>
+        <div class="setup-ttl">Configure Your <span>Interview</span></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <button onclick="changeApiKey()" style="padding:6px 12px;border:1px solid var(--border);border-radius:8px;background:transparent;color:var(--muted2);font-family:'DM Mono',monospace;font-size:.65rem;cursor:pointer;transition:all .2s;letter-spacing:.04em" title="Change API Key">🔑 Key</button>
+        <button class="close-btn" onclick="closeModal()">✕</button>
+      </div>
+    </div>
+
+    <!-- Mode selector -->
+    <div>
+      <div style="font-family:'DM Mono',monospace;font-size:.68rem;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:9px">Interview Mode</div>
+      <div class="mode-toggle">
+        <button class="mode-btn active" id="chatModeBtn" onclick="selectMode('chat')">
+          <span class="mode-icon">💬</span>
+          <span><span class="mode-name">Chat Mode</span><span class="mode-desc">Type your answers</span></span>
+        </button>
+        <button class="mode-btn" id="voiceModeBtn" onclick="selectMode('voice')">
+          <span class="mode-icon">🎤</span>
+          <span><span class="mode-name">Voice Mode</span><span class="mode-desc">Speak your answers aloud</span></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="setup-grid">
+      <div class="sfield"><label>Job Role</label>
+        <select id="roleSelect">
+          <option>Software Engineer</option><option>Frontend Developer</option><option>Backend Developer</option>
+          <option>Full Stack Developer</option><option>Data Scientist</option><option>ML Engineer</option>
+          <option>Product Manager</option><option>UX Designer</option><option>Business Analyst</option>
+          <option>Management Consultant</option><option>Marketing Manager</option><option>Finance Analyst</option>
+        </select></div>
+      <div class="sfield"><label>Experience Level</label>
+        <select id="levelSelect">
+          <option>Entry Level (0-2 years)</option><option selected>Mid Level (2-5 years)</option>
+          <option>Senior Level (5-10 years)</option><option>Staff / Principal</option><option>Manager / Director</option>
+        </select></div>
+      <div class="sfield"><label>Interview Type</label>
+        <select id="typeSelect">
+          <option>Behavioral</option><option>Technical</option><option selected>Mixed (Behavioral + Technical)</option>
+          <option>System Design</option><option>Case Study</option>
+        </select></div>
+      <div class="sfield"><label>Target Company (optional)</label>
+        <input type="text" id="companyInput" placeholder="e.g. Google, Amazon, McKinsey…"></div>
+    </div>
+
+    <div class="info-box" id="infoBox">
+      💡 <strong style="color:var(--text)">Chat Mode:</strong> You'll be asked 5 questions. Type your answers as you would speak them. Feedback is given after each answer.
+    </div>
+
+    <button class="start-btn" id="startBtn" onclick="startInterview()"><span>⚡</span> Begin Mock Interview</button>
+  </div>
+
+  <!-- ── CHAT INTERVIEW SCREEN ── -->
+  <div class="int-scr" id="chatScr">
+    <div class="i-topbar">
+      <div class="i-info">
+        <div class="i-status"><span class="sdot"></span><span style="color:var(--green)">Live</span></div>
+        <div class="i-role-lbl" id="chatSessLabel">Software Engineer · Mid Level</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="mode-tag chat">💬 Chat</span>
+        <div class="qctr" id="chatQCtr">Q 1 / 5</div>
+        <button class="close-btn" onclick="if(confirm('End interview?'))closeModal()">✕</button>
+      </div>
+    </div>
+    <div class="i-body">
+      <!-- AI col -->
+      <div class="ai-col">
+        <div class="ai-head">
+          <div class="ai-ava">🤖</div>
+          <div><div class="ai-nm">Intervexa AI</div><div class="ai-rl" id="chatIntRole">Interviewer</div></div>
+        </div>
+        <div class="qbox">
+          <div class="qlabel">Current Question</div>
+          <div class="qtext" id="chatQText"><div class="thinking"><span>Connecting…</span><div class="tdots"><span></span><span></span><span></span></div></div></div>
+        </div>
+        <div><div class="qlabel" style="margin-bottom:5px">AI Activity</div>
+          <div class="waveform" id="chatWave">
+            <div class="wbar"></div><div class="wbar"></div><div class="wbar"></div><div class="wbar"></div>
+            <div class="wbar"></div><div class="wbar"></div><div class="wbar"></div><div class="wbar"></div>
+            <div class="wbar"></div><div class="wbar"></div><div class="wbar"></div><div class="wbar"></div>
+          </div>
+        </div>
+        <div class="fb-box" id="chatFbBox"><div class="fblbl">💡 AI Feedback</div><div class="fbtext" id="chatFbText"></div></div>
+        <div><div class="qlabel" style="margin-bottom:5px">Scores</div>
+          <div class="score-chips">
+            <div class="chip chipc"><span class="val" id="csc1">–</span><span class="lbl">Clarity</span></div>
+            <div class="chip chipd"><span class="val" id="csc2">–</span><span class="lbl">Depth</span></div>
+            <div class="chip chips"><span class="val" id="csc3">–</span><span class="lbl">STAR</span></div>
+          </div>
+        </div>
+      </div>
+      <!-- Chat user col -->
+      <div class="chat-col">
+        <div><div class="qlabel">Your Answer</div>
+          <textarea class="ans-area" id="chatAnsArea" placeholder="Type your answer here as you would speak it in a real interview…" rows="5"></textarea>
+        </div>
+        <div class="ans-actions">
+          <button class="sub-btn" id="chatSubBtn" onclick="chatSubmit()"><span id="chatSubTxt">Submit Answer</span></button>
+          <button class="nxt-btn" id="chatNxtBtn" onclick="chatNext()" disabled>Next →</button>
+        </div>
+        <div><div class="qlabel">Transcript</div>
+          <div class="trans-area" id="chatTrans"><div class="tph">Your answers will appear here…</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── VOICE INTERVIEW SCREEN ── -->
+  <div class="int-scr" id="voiceScr">
+    <div class="i-topbar">
+      <div class="i-info">
+        <div class="i-status"><span class="sdot"></span><span style="color:var(--green)">Live</span></div>
+        <div class="i-role-lbl" id="voiceSessLabel">Software Engineer · Mid Level</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="mode-tag voice">🎤 Voice</span>
+        <div class="qctr" id="voiceQCtr">Q 1 / 5</div>
+        <button class="close-btn" onclick="stopVoice();if(confirm('End interview?'))closeModal()">✕</button>
+      </div>
+    </div>
+    <div class="i-body">
+      <!-- AI col same -->
+      <div class="ai-col">
+        <div class="ai-head">
+          <div class="ai-ava" id="voiceAva">🤖</div>
+          <div><div class="ai-nm">Intervexa AI</div><div class="ai-rl" id="voiceIntRole">Interviewer</div></div>
+        </div>
+        <div class="qbox">
+          <div class="qlabel">Current Question</div>
+          <div class="qtext" id="voiceQText"><div class="thinking"><span>Connecting…</span><div class="tdots"><span></span><span></span><span></span></div></div></div>
+        </div>
+        <div><div class="qlabel" style="margin-bottom:5px">AI Activity</div>
+          <div class="waveform" id="voiceWave">
+            <div class="wbar"></div><div class="wbar"></div><div class="wbar"></div><div class="wbar"></div>
+            <div class="wbar"></div><div class="wbar"></div><div class="wbar"></div><div class="wbar"></div>
+            <div class="wbar"></div><div class="wbar"></div><div class="wbar"></div><div class="wbar"></div>
+          </div>
+        </div>
+        <div class="fb-box" id="voiceFbBox"><div class="fblbl">💡 AI Feedback</div><div class="fbtext" id="voiceFbText"></div></div>
+        <div><div class="qlabel" style="margin-bottom:5px">Scores</div>
+          <div class="score-chips">
+            <div class="chip chipc"><span class="val" id="vsc1">–</span><span class="lbl">Clarity</span></div>
+            <div class="chip chipd"><span class="val" id="vsc2">–</span><span class="lbl">Depth</span></div>
+            <div class="chip chips"><span class="val" id="vsc3">–</span><span class="lbl">STAR</span></div>
+          </div>
+        </div>
+      </div>
+      <!-- Voice user col -->
+      <div class="voice-col">
+        <div class="voice-avatar-wrap">
+          <div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--accent2),var(--accent));display:grid;place-items:center;font-size:1.8rem;" id="voiceCircle">👤</div>
+          <div class="voice-status-lbl" id="voiceStatusLbl">Ready</div>
+        </div>
+
+        <div style="width:100%">
+          <div class="qlabel">Your Spoken Answer</div>
+          <div class="voice-transcript-box" id="voiceTransBox"><span class="tph">Press the mic and start speaking…</span></div>
+        </div>
+
+        <div class="mic-row">
+          <button class="mic-btn" id="micBtn" onclick="toggleMic()">🎤</button>
+          <div class="mic-hint" id="micHint">Tap to speak</div>
+        </div>
+
+        <div class="voice-btn-row">
+          <button class="v-sub-btn" id="vSubBtn" onclick="voiceSubmit()">Submit Answer ✓</button>
+          <button class="v-nxt-btn" id="vNxtBtn" onclick="voiceNext()">Next Question →</button>
+        </div>
+
+        <div style="width:100%">
+          <div class="qlabel">Transcript</div>
+          <div class="voice-trans" id="voiceTrans"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── RESULTS SCREEN ── -->
+  <div class="res-scr" id="resScr">
+    <div class="res-hdr">
+      <div><div style="font-family:'DM Mono',monospace;font-size:.68rem;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:7px">Session Complete</div><div class="res-ttl">Your Interview <span>Report</span></div></div>
+      <button class="close-btn" onclick="closeModal()">✕</button>
+    </div>
+    <div class="overall" id="overallEl">
+      <div><div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--muted2);letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px">Overall Score</div><div class="big-sc" id="bigSc">–<span>/100</span></div></div>
+      <div class="scbk" id="scBk"></div>
+    </div>
+    <div class="qa-list" id="qaList"></div>
+    <div class="res-actions">
+      <button class="btn-primary" onclick="startNewSession()">Practice Again ↺</button>
+      <button class="btn-ghost" onclick="closeModal()">Close</button>
+    </div>
+  </div>
+
+ </div><!-- /i-modal -->
+</div><!-- /modal-overlay -->
+
+<script>
+// ══════════════════════════ STATE ══════════════════════════
+var cfg = {};
+var TOTAL = 5;
+var mode = 'chat';
+var turns = [];
+var currentQuestion = '';
+var loading = false;
+var apiKey = '';
+var provider = 'groq'; // groq | gemini | openrouter | anthropic
+
+// Voice state
+var recognition = null;
+var voiceTranscript = '';
+var isRecording = false;
+var speechSynth = window.speechSynthesis;
+var currentUtterance = null;
+
+// ══════════════════════════ PROVIDER CONFIG ══════════════════════════
+var PROVIDERS = {
+  groq: {
+    name: 'Groq',
+    placeholder: 'gsk_…',
+    keyLabel: 'Groq API Key',
+    signupUrl: 'https://console.groq.com/keys',
+    signupText: 'Get free key at console.groq.com/keys →',
+    noteColor: 'rgba(0,255,179,.07)', noteBorder: 'rgba(0,255,179,.2)',
+    note: '⚡ <strong style="color:var(--text)">100% Free</strong> — Groq gives generous free tier with no credit card needed. Powered by Llama 3.3 70B — excellent for interviews.',
+    steps: [
+      { t:'Visit Groq Console', d:'Go to <a href="https://console.groq.com" target="_blank" style="color:var(--accent);font-family:\'DM Mono\',monospace;font-size:.75rem;text-decoration:none">console.groq.com</a> and sign up free — no credit card required.' },
+      { t:'Open API Keys', d:'Click <em style="color:var(--muted2)">"API Keys"</em> in the left sidebar.' },
+      { t:'Create a Key', d:'Click <em style="color:var(--muted2)">"Create API Key"</em>, name it "Intervexa", copy the key starting with <code style="background:var(--bg3);padding:1px 5px;border-radius:3px;color:var(--green);font-size:.72rem">gsk_</code>' },
+      { t:'Paste & Connect →', d:'Paste the key in the field and click Connect.' }
+    ]
+  },
+  gemini: {
+    name: 'Gemini',
+    placeholder: 'AIzaSy…',
+    keyLabel: 'Google Gemini API Key',
+    signupUrl: 'https://aistudio.google.com/apikey',
+    signupText: 'Get free key at aistudio.google.com →',
+    noteColor: 'rgba(0,229,255,.07)', noteBorder: 'rgba(0,229,255,.2)',
+    note: '🌀 <strong style="color:var(--text)">Free Tier</strong> — Google gives 15 requests/min and 1,500 req/day free. Powered by Gemini 2.0 Flash.',
+    steps: [
+      { t:'Go to Google AI Studio', d:'Visit <a href="https://aistudio.google.com" target="_blank" style="color:var(--accent);font-family:\'DM Mono\',monospace;font-size:.75rem;text-decoration:none">aistudio.google.com</a> — sign in with any Google account.' },
+      { t:'Get API Key', d:'Click <em style="color:var(--muted2)">"Get API Key"</em> in the top bar, then <em style="color:var(--muted2)">"Create API key"</em>.' },
+      { t:'Copy the Key', d:'Copy the key — it starts with <code style="background:var(--bg3);padding:1px 5px;border-radius:3px;color:var(--green);font-size:.72rem">AIzaSy</code>' },
+      { t:'Paste & Connect →', d:'Paste the key in the field and click Connect.' }
+    ]
+  },
+  openrouter: {
+    name: 'OpenRouter',
+    placeholder: 'sk-or-v1-…',
+    keyLabel: 'OpenRouter API Key',
+    signupUrl: 'https://openrouter.ai/keys',
+    signupText: 'Get free key at openrouter.ai/keys →',
+    noteColor: 'rgba(123,97,255,.07)', noteBorder: 'rgba(123,97,255,.2)',
+    note: '🔀 <strong style="color:var(--text)">Free Models Available</strong> — OpenRouter has many completely free models (Llama, Mistral, Gemma). Select a model marked <em>free</em> in their catalog.',
+    steps: [
+      { t:'Sign up at OpenRouter', d:'Visit <a href="https://openrouter.ai" target="_blank" style="color:var(--accent);font-family:\'DM Mono\',monospace;font-size:.75rem;text-decoration:none">openrouter.ai</a> and create a free account.' },
+      { t:'Go to API Keys', d:'Click your profile → <em style="color:var(--muted2)">"Keys"</em> and create a new key.' },
+      { t:'Copy the Key', d:'Copy the key — it starts with <code style="background:var(--bg3);padding:1px 5px;border-radius:3px;color:var(--green);font-size:.72rem">sk-or-v1-</code>' },
+      { t:'Paste & Connect →', d:'Paste the key below. Intervexa will use <em>meta-llama/llama-3.3-70b-instruct:free</em> model.' }
+    ]
+  },
+  anthropic: {
+    name: 'Anthropic',
+    placeholder: 'sk-ant-api03-…',
+    keyLabel: 'Anthropic API Key',
+    signupUrl: 'https://console.anthropic.com/settings/keys',
+    signupText: 'Get key at console.anthropic.com →',
+    noteColor: 'rgba(255,107,107,.07)', noteBorder: 'rgba(255,107,107,.2)',
+    note: '🤖 <strong style="color:var(--text)">Best Quality</strong> — Claude gives the most natural interview experience. New accounts get $5 free credits (~200 full interviews). After that, each interview costs ~$0.01.',
+    steps: [
+      { t:'Go to Anthropic Console', d:'Visit <a href="https://console.anthropic.com" target="_blank" style="color:var(--accent);font-family:\'DM Mono\',monospace;font-size:.75rem;text-decoration:none">console.anthropic.com</a> and sign up.' },
+      { t:'Open API Keys', d:'Click your profile → <em style="color:var(--muted2)">"API Keys"</em> in the sidebar.' },
+      { t:'Create a Key', d:'Click <em style="color:var(--muted2)">"Create Key"</em>, name it "Intervexa", copy it — starts with <code style="background:var(--bg3);padding:1px 5px;border-radius:3px;color:var(--green);font-size:.72rem">sk-ant-</code>' },
+      { t:'Paste & Connect →', d:'Paste the key below and click Connect.' }
+    ]
+  }
+};
+
+function selectProvider(p){
+  provider = p;
+  // update card highlights
+  ['groq','gemini','openrouter','anthropic'].forEach(function(id){
+    document.getElementById('pcard-'+id).classList.toggle('active', id===p);
+  });
+  var pc = PROVIDERS[p];
+  // update input
+  document.getElementById('apikeyInput').placeholder = pc.placeholder;
+  document.getElementById('apikeyInput').value = '';
+  document.getElementById('apikeyInput').classList.remove('error');
+  document.getElementById('apikeyInput').type = 'password';
+  document.getElementById('keyToggle').textContent = '👁';
+  document.getElementById('apikeyErr').classList.remove('show');
+  document.getElementById('apikeyBtn').disabled = true;
+  document.getElementById('keySavedBadge').classList.remove('show');
+  document.getElementById('apikeyBtnTxt').textContent = 'Connect & Continue →';
+  document.getElementById('apikeyBtn').style.background = '';
+  document.getElementById('keyLabel').textContent = pc.keyLabel;
+  document.getElementById('signupLink').innerHTML = '<a href="'+pc.signupUrl+'" target="_blank" style="color:var(--accent);text-decoration:none">'+pc.signupText+'</a>';
+  // update note
+  document.getElementById('providerNote').style.background = pc.noteColor;
+  document.getElementById('providerNote').style.border = '1px solid '+pc.noteBorder;
+  document.getElementById('providerNote').style.color = 'var(--muted2)';
+  document.getElementById('providerNote').innerHTML = pc.note;
+  // update guide steps
+  var html = '';
+  pc.steps.forEach(function(s,i){
+    html += '<div class="guide-step"><div class="guide-num">'+(i+1)+'</div><div class="guide-text"><strong>'+s.t+'</strong><br>'+s.d+'</div></div>';
+  });
+  document.getElementById('providerGuide').innerHTML = html;
+}
+
+// init provider on load
+function initProviderUI(){ selectProvider('groq'); }
+
+// ══════════════════════════ KEY INPUT HANDLERS ══════════════════════════
+function onKeyInput(){
+  var val = document.getElementById('apikeyInput').value.trim();
+  document.getElementById('apikeyInput').classList.remove('error');
+  document.getElementById('apikeyErr').classList.remove('show');
+  document.getElementById('apikeyBtn').disabled = val.length < 8;
+}
+
+function toggleKeyVis(){
+  var inp = document.getElementById('apikeyInput');
+  var isHidden = inp.type === 'password';
+  inp.type = isHidden ? 'text' : 'password';
+  document.getElementById('keyToggle').textContent = isHidden ? '🙈' : '👁';
+}
+
+function saveKey(){
+  var val = document.getElementById('apikeyInput').value.trim();
+  if(val.length < 8){
+    document.getElementById('apikeyInput').classList.add('error');
+    document.getElementById('apikeyErr').textContent = '⚠ Key too short — paste your full API key';
+    document.getElementById('apikeyErr').classList.add('show');
+    return;
+  }
+  apiKey = val;
+  document.getElementById('keySavedBadge').classList.add('show');
+  document.getElementById('apikeyBtnTxt').textContent = '✓ Connected!';
+  document.getElementById('apikeyBtn').style.background = 'linear-gradient(135deg,var(--green),var(--accent))';
+  setTimeout(function(){ showScreen('setupScr'); }, 700);
+}
+
+function changeApiKey(){
+  apiKey = '';
+  document.getElementById('apikeyInput').value = '';
+  document.getElementById('apikeyInput').disabled = false;
+  document.getElementById('apikeyInput').type = 'password';
+  document.getElementById('apikeyInput').style.color = '';
+  document.getElementById('apikeyInput').classList.remove('error');
+  document.getElementById('apikeyErr').classList.remove('show');
+  document.getElementById('keySavedBadge').classList.remove('show');
+  document.getElementById('apikeyBtn').disabled = true;
+  document.getElementById('apikeyBtn').style.background = '';
+  document.getElementById('apikeyBtnTxt').textContent = 'Connect & Continue →';
+  document.getElementById('keyToggle').textContent = '👁';
+  showScreen('apikeyScr');
+}
+
+// ══════════════════════════ CLAUDE API — MULTI-PROVIDER ══════════════════════════
+async function callAI(messages, sys, maxTokens){
+  if(!apiKey) throw new Error('No API key');
+  var p = provider;
+  var body, url, headers;
+
+  if(p === 'anthropic'){
+    url = 'https://api.anthropic.com/v1/messages';
+    headers = { 'Content-Type':'application/json', 'x-api-key':apiKey, 'anthropic-version':'2023-06-01' };
+    body = { model:'claude-haiku-4-5-20251001', max_tokens:maxTokens||500, system:sys, messages:messages };
+
+  } else if(p === 'groq'){
+    url = 'https://api.groq.com/openai/v1/chat/completions';
+    headers = { 'Content-Type':'application/json', 'Authorization':'Bearer '+apiKey };
+    var groqMsgs = [{ role:'system', content:sys }].concat(messages);
+    body = { model:'llama-3.3-70b-versatile', max_tokens:maxTokens||500, messages:groqMsgs };
+
+  } else if(p === 'gemini'){
+    url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key='+apiKey;
+    headers = { 'Content-Type':'application/json' };
+    // convert messages to Gemini format
+    var geminiContents = messages.map(function(m){
+      return { role: m.role==='assistant'?'model':'user', parts:[{ text: m.content }] };
+    });
+    body = { systemInstruction:{ parts:[{ text:sys }] }, contents:geminiContents,
+      generationConfig:{ maxOutputTokens:maxTokens||500, temperature:0.85 } };
+
+  } else if(p === 'openrouter'){
+    url = 'https://openrouter.ai/api/v1/chat/completions';
+    headers = { 'Content-Type':'application/json', 'Authorization':'Bearer '+apiKey,
+      'HTTP-Referer':'https://intervexa.ai', 'X-Title':'Intervexa AI' };
+    var orMsgs = [{ role:'system', content:sys }].concat(messages);
+    body = { model:'meta-llama/llama-3.3-70b-instruct:free', max_tokens:maxTokens||500, messages:orMsgs };
+  }
+
+  var r = await fetch(url, { method:'POST', headers:headers, body:JSON.stringify(body) });
+  var d = await r.json();
+
+  // Parse response per provider
+  if(p === 'anthropic'){
+    if(d.error) throw new Error(d.error.message);
+    return d.content[0].text.trim();
+  } else if(p === 'gemini'){
+    if(d.error) throw new Error(d.error.message);
+    return d.candidates[0].content.parts[0].text.trim();
+  } else {
+    // openai-compatible (groq, openrouter)
+    if(d.error) throw new Error(d.error.message||JSON.stringify(d.error));
+    return d.choices[0].message.content.trim();
+  }
+}
+function selectMode(m){
+  mode = m;
+  document.getElementById('chatModeBtn').classList.toggle('active', m==='chat');
+  document.getElementById('voiceModeBtn').classList.toggle('active', m==='voice');
+  document.getElementById('infoBox').innerHTML = m==='chat'
+    ? '💡 <strong style="color:var(--text)">Chat Mode:</strong> You\'ll be asked 5 questions. Type your answers as you would speak them. Feedback is given after each answer.'
+    : '💡 <strong style="color:var(--text)">Voice Mode:</strong> The AI will speak each question aloud. Press the mic button to record your answer. Requires microphone permission.';
+}
+
+function openModal(){
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  if(!apiKey){ initProviderUI(); showScreen('apikeyScr'); }
+  else { showScreen('setupScr'); }
+}
+function closeModal(){ stopVoice(); document.getElementById('modalOverlay').classList.remove('open'); document.body.style.overflow=''; setTimeout(resetAll,300); }
+function setProgress(p){ document.getElementById('progFill').style.width=p+'%'; }
+
+function setWave(waveId, on){
+  document.querySelectorAll('#'+waveId+' .wbar').forEach(function(b){ b.classList.toggle('wact',on); });
+}
+
+function showScreen(id){
+  document.getElementById('apikeyScr').style.display = (id==='apikeyScr') ? 'flex' : 'none';
+  document.getElementById('setupScr').style.display  = (id==='setupScr')  ? 'flex' : 'none';
+  document.getElementById('chatScr').classList.toggle('active', id==='chatScr');
+  document.getElementById('voiceScr').classList.toggle('active', id==='voiceScr');
+  document.getElementById('resScr').classList.toggle('active', id==='resScr');
+}
+
+function resetAll(){
+  stopVoice();
+  turns=[]; currentQuestion=''; loading=false; voiceTranscript=''; isRecording=false;
+  // chat resets
+  document.getElementById('chatTrans').innerHTML='<div class="tph">Your answers will appear here…</div>';
+  document.getElementById('chatAnsArea').value='';
+  document.getElementById('chatFbBox').classList.remove('show');
+  ['csc1','csc2','csc3'].forEach(function(id){ document.getElementById(id).textContent='–'; });
+  document.getElementById('chatNxtBtn').disabled=true;
+  document.getElementById('chatSubBtn').disabled=false;
+  document.getElementById('chatSubTxt').textContent='Submit Answer';
+  setWave('chatWave',false);
+  // voice resets
+  document.getElementById('voiceTransBox').innerHTML='<span class="tph">Press the mic and start speaking…</span>';
+  document.getElementById('voiceTrans').innerHTML='';
+  document.getElementById('voiceFbBox').classList.remove('show');
+  ['vsc1','vsc2','vsc3'].forEach(function(id){ document.getElementById(id).textContent='–'; });
+  document.getElementById('vSubBtn').classList.remove('show');
+  document.getElementById('vNxtBtn').classList.remove('show');
+  document.getElementById('micBtn').classList.remove('recording');
+  document.getElementById('micBtn').disabled=false;
+  document.getElementById('micHint').textContent='Tap to speak';
+  document.getElementById('voiceStatusLbl').textContent='Ready';
+  setWave('voiceWave',false);
+  // setup
+  document.getElementById('startBtn').disabled=false;
+  document.getElementById('startBtn').innerHTML='<span>⚡</span> Begin Mock Interview';
+  setProgress(0);
+  showScreen('setupScr');
+}
+
+// ══════════════════════════ CLAUDE API ══════════════════════════
+function buildInterviewerSystem(){
+  return 'You are a sharp, experienced interviewer conducting a real '+cfg.type+' interview for a '+cfg.level+' '+cfg.role+(cfg.company?' position at '+cfg.company:'')+'. \n\nConduct a NATURAL, FLOWING conversation — not a scripted questionnaire:\n- React to what the candidate actually said. If vague, probe deeper. If interesting, follow up.\n- Use natural language: "Interesting — can you walk me through...", "I\'d like to dig into that...", "Let\'s shift gears...", "Tell me about a specific time when..."\n- Cover a range: background, skills, problem-solving, teamwork, motivation.\n- Ask ONE concise question at a time. No numbering. No coaching.\n- You have asked '+(turns.length)+' question(s) so far. '+(TOTAL-turns.length)+' remaining.';
+}
+
+function buildHistory(){
+  var msgs = [{ role:'user', content:'Start the interview. Ask your first question naturally and warmly.' }];
+  for(var i=0;i<turns.length;i++){
+    msgs.push({ role:'assistant', content: turns[i].question });
+    msgs.push({ role:'user', content: turns[i].answer });
+  }
+  if(turns.length>0 && turns.length<TOTAL){
+    msgs.push({ role:'user', content:'[React naturally to their answer above and ask your next interview question.]' });
+  }
+  return msgs;
+}
+
+// ══════════════════════════ START ══════════════════════════
+async function startInterview(){
+  cfg = {
+    role:    document.getElementById('roleSelect').value,
+    level:   document.getElementById('levelSelect').value,
+    type:    document.getElementById('typeSelect').value,
+    company: document.getElementById('companyInput').value.trim()
+  };
+  document.getElementById('startBtn').disabled=true;
+  document.getElementById('startBtn').innerHTML='<span class="tdots"><span></span><span></span><span></span></span> Connecting to interviewer…';
+
+  var label = cfg.role+' · '+cfg.level+(cfg.company?' · '+cfg.company:'');
+  var roleLabel = cfg.type+' Interviewer';
+
+  if(mode==='chat'){
+    document.getElementById('chatSessLabel').textContent=label;
+    document.getElementById('chatIntRole').textContent=roleLabel;
+    showScreen('chatScr');
+    setProgress(5);
+    await chatAskNext();
+  } else {
+    document.getElementById('voiceSessLabel').textContent=label;
+    document.getElementById('voiceIntRole').textContent=roleLabel;
+    showScreen('voiceScr');
+    setProgress(5);
+    await voiceAskNext();
+  }
+}
+
+function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+// ══════════════════════════ CHAT MODE ══════════════════════════
+async function chatAskNext(){
+  var qNum = turns.length+1;
+  document.getElementById('chatQCtr').textContent='Q '+qNum+' / '+TOTAL;
+  document.getElementById('chatAnsArea').value='';
+  document.getElementById('chatFbBox').classList.remove('show');
+  ['csc1','csc2','csc3'].forEach(function(id){ document.getElementById(id).textContent='–'; });
+  document.getElementById('chatNxtBtn').disabled=true;
+  document.getElementById('chatSubBtn').disabled=false;
+  document.getElementById('chatSubTxt').textContent='Submit Answer';
+  document.getElementById('chatQText').innerHTML='<div class="thinking"><span>Thinking</span><div class="tdots"><span></span><span></span><span></span></div></div>';
+  setWave('chatWave',true);
+  try{
+    var q = await callAI(buildHistory(), buildInterviewerSystem(), 400);
+    currentQuestion = q;
+    setWave('chatWave',false);
+    typeQ('chatQText', q);
+  } catch(e){
+    setWave('chatWave',false);
+    var msg = e.message||'Unknown error';
+    document.getElementById('chatQText').innerHTML =
+      '<div style="color:var(--accent3);font-size:.82rem;line-height:1.6">'
+      +'<strong>⚠ API Error:</strong> '+escHtml(msg)+'<br><br>'
+      +'<span style="color:var(--muted2)">Check your API key is correct for the selected provider, then '
+      +'<a href="#" onclick="changeApiKey();return false;" style="color:var(--accent);text-decoration:none">click here to re-enter it</a>.</span>'
+      +'</div>';
+  }
+}
+
+function typeQ(elId, text){
+  var el = document.getElementById(elId);
+  el.textContent='';
+  var i=0;
+  var iv=setInterval(function(){ el.textContent+=text[i]; i++; if(i>=text.length)clearInterval(iv); },15);
+}
+
+async function chatSubmit(){
+  var ans = document.getElementById('chatAnsArea').value.trim();
+  if(!ans){ document.getElementById('chatAnsArea').style.borderColor='rgba(255,107,107,.5)'; setTimeout(function(){ document.getElementById('chatAnsArea').style.borderColor='';},900); return; }
+  if(loading) return;
+  loading=true;
+  document.getElementById('chatSubBtn').disabled=true;
+  document.getElementById('chatSubTxt').textContent='Evaluating…';
+  setWave('chatWave',true);
+  appendChatTrans(turns.length+1, ans);
+  try{
+    var result = await evalAnswer(ans);
+    document.getElementById('csc1').textContent=result.clarity;
+    document.getElementById('csc2').textContent=result.depth;
+    document.getElementById('csc3').textContent=result.star;
+    document.getElementById('chatFbText').textContent=result.feedback;
+    document.getElementById('chatFbBox').classList.add('show');
+    turns.push({ question:currentQuestion, answer:ans, feedback:result.feedback, scores:result });
+    document.getElementById('chatSubTxt').textContent='Submitted ✓';
+    document.getElementById('chatNxtBtn').disabled=false;
+    document.getElementById('chatNxtBtn').textContent = turns.length>=TOTAL ? 'See Results →' : 'Next →';
+  } catch(e){
+    document.getElementById('chatSubTxt').textContent='Error — retry';
+    document.getElementById('chatSubBtn').disabled=false;
+    document.getElementById('chatFbText').textContent='⚠ Evaluation failed: '+e.message+'. Please try submitting again.';
+    document.getElementById('chatFbBox').classList.add('show');
+  }
+  loading=false; setWave('chatWave',false);
+  setProgress(Math.round((turns.length/TOTAL)*85));
+}
+
+function appendChatTrans(n, ans){
+  var ta=document.getElementById('chatTrans');
+  if(ta.querySelector('.tph')) ta.innerHTML='';
+  ta.innerHTML+='<div style="margin-bottom:10px;padding:9px 11px;background:var(--bg3);border:1px solid var(--border);border-radius:8px"><div style="font-size:.6rem;color:var(--accent);font-family:\'DM Mono\',monospace;letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px">Q'+n+'</div><div style="font-size:.8rem;color:var(--muted2);line-height:1.5">'+escHtml(ans)+'</div></div>';
+  ta.scrollTop=ta.scrollHeight;
+}
+
+async function chatNext(){
+  if(turns.length>=TOTAL){ buildResults(); return; }
+  await chatAskNext();
+}
+
+// ══════════════════════════ VOICE MODE ══════════════════════════
+async function voiceAskNext(){
+  var qNum = turns.length+1;
+  document.getElementById('voiceQCtr').textContent='Q '+qNum+' / '+TOTAL;
+  document.getElementById('voiceTransBox').innerHTML='<span class="tph">Listening for the question…</span>';
+  document.getElementById('voiceFbBox').classList.remove('show');
+  ['vsc1','vsc2','vsc3'].forEach(function(id){ document.getElementById(id).textContent='–'; });
+  document.getElementById('vSubBtn').classList.remove('show');
+  document.getElementById('vNxtBtn').classList.remove('show');
+  document.getElementById('micBtn').disabled=true;
+  document.getElementById('micHint').textContent='AI is speaking…';
+  setVoiceStatus('AI Speaking…');
+  document.getElementById('voiceQText').innerHTML='<div class="thinking"><span>Thinking</span><div class="tdots"><span></span><span></span><span></span></div></div>';
+  setWave('voiceWave',true);
+
+  try{
+    var q = await callAI(buildHistory(), buildInterviewerSystem(), 400);
+    currentQuestion = q;
+    setWave('voiceWave',false);
+    typeQ('voiceQText', q);
+    speakText(q, function(){
+      document.getElementById('micBtn').disabled=false;
+      document.getElementById('micHint').textContent='Tap to speak';
+      setVoiceStatus('Your turn — tap mic');
+      voiceTranscript='';
+      document.getElementById('voiceTransBox').innerHTML='<span class="tph">Press the mic and start speaking…</span>';
+    });
+  } catch(e){
+    setWave('voiceWave',false);
+    var msg = e.message||'Unknown error';
+    document.getElementById('voiceQText').innerHTML =
+      '<div style="color:var(--accent3);font-size:.82rem;line-height:1.6">'
+      +'<strong>⚠ API Error:</strong> '+escHtml(msg)+'<br><br>'
+      +'<span style="color:var(--muted2)">Check your key is correct for the selected provider — '
+      +'<a href="#" onclick="changeApiKey();return false;" style="color:var(--accent);text-decoration:none">re-enter API key</a>.</span>'
+      +'</div>';
+    setVoiceStatus('Error — check API key');
+    document.getElementById('micBtn').disabled=false;
+  }
+}
+
+function setVoiceStatus(txt){ document.getElementById('voiceStatusLbl').textContent=txt; }
+
+function speakText(text, onEnd){
+  if(!speechSynth) { if(onEnd) onEnd(); return; }
+  speechSynth.cancel();
+  var utter = new SpeechSynthesisUtterance(text);
+  utter.rate=0.95; utter.pitch=1.0; utter.volume=1;
+  // pick a clear voice if available
+  var voices = speechSynth.getVoices();
+  var pref = voices.find(function(v){ return v.lang.startsWith('en') && !v.name.includes('Google') && v.localService; })
+           || voices.find(function(v){ return v.lang.startsWith('en'); });
+  if(pref) utter.voice=pref;
+  utter.onend = function(){ setWave('voiceWave',false); if(onEnd) onEnd(); };
+  utter.onstart = function(){ setWave('voiceWave',true); };
+  currentUtterance = utter;
+  speechSynth.speak(utter);
+}
+
+function stopVoice(){
+  if(speechSynth) speechSynth.cancel();
+  if(recognition){ try{ recognition.stop(); }catch(e){} recognition=null; }
+  isRecording=false;
+}
+
+function toggleMic(){
+  if(isRecording){ stopRecording(); } else { startRecording(); }
+}
+
+function startRecording(){
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!SR){ alert('Your browser does not support speech recognition. Please use Chrome or Edge.'); return; }
+  recognition = new SR();
+  recognition.continuous = true;
+  recognition.interimResults = true;
+  recognition.lang = 'en-US';
+  var finalText = '';
+  recognition.onresult = function(e){
+    var interim='';
+    for(var i=e.resultIndex;i<e.results.length;i++){
+      if(e.results[i].isFinal){ finalText+=e.results[i][0].transcript+' '; }
+      else { interim+=e.results[i][0].transcript; }
+    }
+    voiceTranscript = finalText;
+    var display = finalText + (interim ? '<em style="color:var(--muted)">'+escHtml(interim)+'</em>' : '');
+    document.getElementById('voiceTransBox').innerHTML = display || '<span class="tph">Listening…</span>';
+    document.getElementById('voiceTransBox').classList.add('listening');
+    if(finalText.trim().length>0){
+      document.getElementById('vSubBtn').classList.add('show');
+    }
+  };
+  recognition.onerror = function(e){ if(e.error!=='no-speech') setVoiceStatus('Mic error: '+e.error); };
+  recognition.onend = function(){ if(isRecording) stopRecording(); };
+  recognition.start();
+  isRecording=true;
+  document.getElementById('micBtn').classList.add('recording');
+  document.getElementById('micBtn').textContent='⏹';
+  document.getElementById('micHint').textContent='Recording… tap to stop';
+  setVoiceStatus('Listening…');
+}
+
+function stopRecording(){
+  if(recognition){ try{ recognition.stop(); }catch(e){} recognition=null; }
+  isRecording=false;
+  document.getElementById('micBtn').classList.remove('recording');
+  document.getElementById('micBtn').textContent='🎤';
+  document.getElementById('micHint').textContent='Tap to speak again';
+  document.getElementById('voiceTransBox').classList.remove('listening');
+  setVoiceStatus('Answer captured');
+  if(voiceTranscript.trim()) document.getElementById('vSubBtn').classList.add('show');
+}
+
+async function voiceSubmit(){
+  var ans = voiceTranscript.trim();
+  if(!ans){ setVoiceStatus('No answer detected — try again'); return; }
+  if(loading) return;
+  loading=true;
+  stopRecording();
+  document.getElementById('micBtn').disabled=true;
+  document.getElementById('vSubBtn').classList.remove('show');
+  setVoiceStatus('Evaluating your answer…');
+  setWave('voiceWave',true);
+  appendVoiceTrans(turns.length+1, ans);
+  var result = await evalAnswer(ans);
+  document.getElementById('vsc1').textContent=result.clarity;
+  document.getElementById('vsc2').textContent=result.depth;
+  document.getElementById('vsc3').textContent=result.star;
+  document.getElementById('voiceFbText').textContent=result.feedback;
+  document.getElementById('voiceFbBox').classList.add('show');
+  turns.push({ question:currentQuestion, answer:ans, feedback:result.feedback, scores:result });
+  loading=false; setWave('voiceWave',false);
+  setProgress(Math.round((turns.length/TOTAL)*85));
+  setVoiceStatus('Feedback ready');
+  // Speak feedback briefly
+  speakText('Score: '+result.clarity+' for clarity. '+result.feedback, null);
+  var isLast = turns.length>=TOTAL;
+  document.getElementById('vNxtBtn').classList.add('show');
+  document.getElementById('vNxtBtn').textContent = isLast ? 'See Results →' : 'Next Question →';
+}
+
+function appendVoiceTrans(n, ans){
+  var ta=document.getElementById('voiceTrans');
+  ta.innerHTML+='<div style="margin-bottom:9px;padding:8px 11px;background:var(--bg3);border:1px solid var(--border);border-radius:8px"><div style="font-size:.6rem;color:var(--accent2);font-family:\'DM Mono\',monospace;letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px">Q'+n+' — spoken</div><div style="font-size:.78rem;color:var(--muted2);line-height:1.5">'+escHtml(ans)+'</div></div>';
+  ta.scrollTop=ta.scrollHeight;
+}
+
+async function voiceNext(){
+  if(turns.length>=TOTAL){ buildResults(); return; }
+  voiceTranscript='';
+  document.getElementById('voiceTransBox').innerHTML='<span class="tph">Press the mic and start speaking…</span>';
+  document.getElementById('voiceTransBox').classList.remove('listening');
+  document.getElementById('vNxtBtn').classList.remove('show');
+  await voiceAskNext();
+}
+
+// ══════════════════════════ SHARED EVAL ══════════════════════════
+async function evalAnswer(ans){
+  var sys='You are a rigorous interview evaluator. Role: '+cfg.level+' '+cfg.role+(cfg.company?' at '+cfg.company:'')+'. Evaluate the answer. Respond ONLY with valid JSON, no markdown:\n{"clarity":<int 1-100>,"depth":<int 1-100>,"star":<int 1-100>,"feedback":"<2-3 sentences: name what was good AND what to improve specifically>"}';
+  var raw = await callAI([{ role:'user', content:'Question: "'+currentQuestion+'"\nAnswer: "'+ans+'"' }], sys, 400);
+  // Strip any markdown fences the model might add
+  var clean = raw.replace(/```json|```/g,'').trim();
+  // Some models wrap in extra text — try to extract the JSON object
+  var match = clean.match(/\{[\s\S]*\}/);
+  if(match) clean = match[0];
+  var r = JSON.parse(clean);
+  if(typeof r.clarity!=='number') throw new Error('Invalid evaluation response');
+  r.clarity = Math.max(1,Math.min(100,Math.round(r.clarity)));
+  r.depth   = Math.max(1,Math.min(100,Math.round(r.depth)));
+  r.star    = Math.max(1,Math.min(100,Math.round(r.star)));
+  return r;
+}
+
+// ══════════════════════════ RESULTS ══════════════════════════
+function buildResults(){
+  stopVoice();
+  setProgress(100);
+  var ac=Math.round(turns.reduce(function(a,t){return a+t.scores.clarity;},0)/turns.length);
+  var ad=Math.round(turns.reduce(function(a,t){return a+t.scores.depth;},0)/turns.length);
+  var as2=Math.round(turns.reduce(function(a,t){return a+t.scores.star;},0)/turns.length);
+  var ov=Math.round((ac+ad+as2)/3);
+  var grade=ov>=88?'🏆 Outstanding':ov>=75?'⭐ Strong':ov>=62?'👍 Solid':ov>=50?'📈 Developing':'💪 Keep Practicing';
+  document.getElementById('bigSc').innerHTML=ov+'<span>/100</span>';
+  document.getElementById('scBk').innerHTML=
+    '<div class="sbchip sb1"><span class="v">'+ac+'</span><span class="l">Clarity</span></div>'
+   +'<div class="sbchip sb2"><span class="v">'+ad+'</span><span class="l">Depth</span></div>'
+   +'<div class="sbchip sb3"><span class="v">'+as2+'</span><span class="l">STAR</span></div>'
+   +'<div class="sbchip sb4"><span class="v">'+grade+'</span><span class="l">Grade</span></div>';
+  var html='';
+  for(var i=0;i<turns.length;i++){
+    html+='<div class="qa-item">'
+      +'<div class="qa-q">Q'+(i+1)+': '+escHtml(turns[i].question)+'</div>'
+      +'<div class="qa-a">'+escHtml(turns[i].answer)+'</div>'
+      +'<div class="qa-fb">💡 '+escHtml(turns[i].feedback||'Good overall.')+'</div>'
+      +'</div>';
+  }
+  document.getElementById('qaList').innerHTML=html;
+  showScreen('resScr');
+}
+
+function startNewSession(){ resetAll(); }
+
+document.getElementById('modalOverlay').addEventListener('click',function(e){
+  if(e.target===document.getElementById('modalOverlay')){ stopVoice(); if(confirm('End interview?')) closeModal(); }
+});
+
+// preload voices
+if(speechSynth) speechSynth.getVoices();
+
+initProviderUI();
+showScreen('apikeyScr');
+</script>
+</body>
+</html>
