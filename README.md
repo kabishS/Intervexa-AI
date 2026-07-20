@@ -1,5 +1,4 @@
  🚀 Intervexa AI
-
 Intervexa AI is a modern interview preparation platform designed to help students and job seekers improve their aptitude, coding, and problem-solving skills through interactive assessments, coding challenges, and smart study reminders.
 
 --------------------------------------------------------------------------------------------------------
