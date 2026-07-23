@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CodeArena — Codeforces Practice Runner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+:root{
+    --bg:#F3F5FA;
+    --panel:#FFFFFF;
+    --border:#E3E7EF;
+    --ink:#12141C;
+    --ink-soft:#5B6472;
+    --ink-faint:#9AA2B1;
+    --accent:#4F46E5;
+    --accent-dark:#4338CA;
+    --accent-tint:#EEECFE;
+    --editor-bg:#1E1E2E;
+    --editor-panel:#252539;
+    --editor-ink:#D6DBF5;
+    --editor-line:#33334A;
+    --green:#16A34A;
+    --green-tint:#EAFBF1;
+    --red:#DC2626;
+    --red-tint:#FDECEC;
+    --orange:#D97706;
+    --orange-tint:#FEF3E2;
+}
+
+*{ margin:0; padding:0; box-sizing:border-box; font-family:'Inter',sans-serif; }
+html,body{ height:100%; }
+body{
+    background:var(--bg);
+    color:var(--ink);
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+}
+
+.mono{ font-family:'JetBrains Mono',monospace; }
+
+/* ---------- Top bar ---------- */
+
+header{
+    background:var(--ink);
+    background-image:radial-gradient(700px 260px at 10% 0%, rgba(79,70,229,0.45), transparent 60%);
+    color:#fff;
+    padding:14px 26px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-shrink:0;
+    border-bottom:1px solid rgba(255,255,255,0.06);
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-weight:800;
+    font-size:19px;
+    letter-spacing:-0.02em;
+}
+
+.brand .mark{
+    width:26px; height:26px;
+    border-radius:8px;
+    background:linear-gradient(135deg,#6366F1,#4F46E5);
+    display:flex; align-items:center; justify-content:center;
+    font-size:14px;
+    box-shadow:0 0 0 4px rgba(99,102,241,0.18);
+}
+
+.brand span{ color:#A5B4FC; }
+
+.header-right{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    font-size:12.5px;
+    color:rgba(255,255,255,0.55);
+}
+
+.pulse-dot{
+    width:7px; height:7px; border-radius:50%;
+    background:var(--green);
+    box-shadow:0 0 0 3px rgba(22,163,74,0.25);
+    display:inline-block;
+    margin-right:6px;
+}
+
+/* ---------- Layout ---------- */
+
+.workspace{
+    flex:1;
+    display:grid;
+    grid-template-columns:minmax(340px,42%) 1fr;
+    overflow:hidden;
+}
+
+/* ---------- Left: problems ---------- */
+
+.left-pane{
+    background:var(--panel);
+    border-right:1px solid var(--border);
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+}
+
+.filters{
+    padding:16px 18px 14px;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    flex-shrink:0;
+}
+
+.search-row{
+    display:flex;
+    gap:8px;
+}
+
+.search-row input[type="text"]{
+    flex:1;
+    padding:10px 14px;
+    border-radius:10px;
+    border:1px solid var(--border);
+    font-size:14px;
+    background:#FAFBFD;
+}
+
+.search-row input[type="text"]:focus-visible,
+select:focus-visible, button:focus-visible, textarea:focus-visible{
+    outline:2px solid var(--accent);
+    outline-offset:1px;
+}
+
+.filter-row{
+    display:flex;
+    gap:8px;
+}
+
+.filter-row select{
+    flex:1;
+    padding:9px 12px;
+    border-radius:10px;
+    border:1px solid var(--border);
+    font-size:13px;
+    background:#FAFBFD;
+    color:var(--ink-soft);
+}
+
+.status-line{
+    padding:10px 18px;
+    font-size:12.5px;
+    color:var(--ink-faint);
+    border-bottom:1px solid var(--border);
+    flex-shrink:0;
+}
+
+.status-line b{ color:var(--ink); }
+
+#problemList{
+    overflow-y:auto;
+    flex:1;
+}
+
+.problem-row{
+    padding:13px 18px;
+    border-bottom:1px solid var(--border);
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    transition:background .15s ease;
+}
+
+.problem-row:hover{ background:#FAFAFF; }
+.problem-row.active{ background:var(--accent-tint); }
+
+.problem-row-main{ min-width:0; }
+
+.problem-idx{
+    font-size:11.5px;
+    color:var(--ink-faint);
+    font-weight:600;
+    margin-right:6px;
+}
+
+.problem-name{
+    font-size:13.5px;
+    font-weight:600;
+    color:var(--ink);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.problem-tags{
+    font-size:11px;
+    color:var(--ink-faint);
+    margin-top:3px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.rating-pill{
+    font-size:11.5px;
+    font-weight:700;
+    padding:4px 9px;
+    border-radius:7px;
+    flex-shrink:0;
+    font-family:'JetBrains Mono',monospace;
+}
+
+.empty-msg, .loading-msg{
+    padding:40px 20px;
+    text-align:center;
+    color:var(--ink-faint);
+    font-size:13.5px;
+}
+
+/* ---------- Problem detail overlay (inside left pane) ---------- */
+
+.detail-view{
+    display:none;
+    flex-direction:column;
+    overflow:hidden;
+    flex:1;
+}
+
+.detail-view.active{ display:flex; }
+#listView.hidden{ display:none; }
+
+.back-btn{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    padding:12px 18px;
+    font-size:13px;
+    font-weight:600;
+    color:var(--accent);
+    cursor:pointer;
+    border-bottom:1px solid var(--border);
+    flex-shrink:0;
+    background:none;
+    border-left:none; border-right:none; border-top:none;
+    width:100%;
+    text-align:left;
+}
+.back-btn:hover{ background:#FAFAFF; }
+
+.detail-body{
+    padding:22px 22px 40px;
+    overflow-y:auto;
+}
+
+.detail-title{
+    font-size:20px;
+    font-weight:800;
+    letter-spacing:-0.01em;
+    margin-bottom:10px;
+    line-height:1.3;
+}
+
+.detail-meta{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-bottom:18px;
+}
+
+.detail-meta .rating-pill{ font-size:12.5px; padding:5px 11px; }
+
+.chip{
+    font-size:11.5px;
+    padding:5px 11px;
+    border-radius:999px;
+    background:#F1F2F8;
+    color:var(--ink-soft);
+    font-weight:500;
+}
+
+.notice-box{
+    background:var(--accent-tint);
+    border:1px solid #DAD6FB;
+    border-radius:12px;
+    padding:14px 16px;
+    font-size:13px;
+    color:#3730A3;
+    line-height:1.6;
+    margin-bottom:18px;
+}
+
+.detail-actions{
+    display:flex;
+    gap:10px;
+}
+
+.link-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:11px 18px;
+    border-radius:10px;
+    font-size:13.5px;
+    font-weight:600;
+    text-decoration:none;
+    cursor:pointer;
+    border:1px solid var(--border);
+}
+
+.link-btn.primary{
+    background:var(--ink);
+    color:#fff;
+    border-color:var(--ink);
+}
+.link-btn.primary:hover{ background:#2A2D3A; }
+
+.link-btn.ghost{
+    background:#fff;
+    color:var(--ink);
+}
+.link-btn.ghost:hover{ background:#FAFBFD; }
+
+/* ---------- Right: editor ---------- */
+
+.right-pane{
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+    background:var(--editor-bg);
+}
+
+.lang-tabs{
+    display:flex;
+    align-items:center;
+    gap:4px;
+    padding:10px 14px;
+    background:var(--editor-panel);
+    border-bottom:1px solid var(--editor-line);
+    flex-shrink:0;
+}
+
+.lang-tab{
+    padding:8px 16px;
+    font-size:13px;
+    font-weight:600;
+    color:#9296B5;
+    background:none;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-family:'JetBrains Mono',monospace;
+    transition:background .15s ease, color .15s ease;
+}
+
+.lang-tab:hover{ color:#D6DBF5; background:rgba(255,255,255,0.04); }
+
+.lang-tab.active{
+    color:#fff;
+    background:var(--accent);
+}
+
+.editor-spacer{ flex:1; }
+
+.run-btn{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:9px 20px;
+    border-radius:9px;
+    background:linear-gradient(180deg,#22C55E,#16A34A);
+    color:#fff;
+    font-weight:700;
+    font-size:13.5px;
+    border:1px solid #15803D;
+    cursor:pointer;
+    box-shadow:0 6px 16px -6px rgba(22,163,74,0.55);
+    transition:transform .15s ease, filter .15s ease;
+}
+
+.run-btn:hover{ filter:brightness(1.06); transform:translateY(-1px); }
+.run-btn:disabled{ opacity:0.55; cursor:progress; transform:none; }
+
+.reset-btn{
+    padding:9px 14px;
+    border-radius:9px;
+    background:none;
+    color:#9296B5;
+    font-size:13px;
+    font-weight:600;
+    border:1px solid var(--editor-line);
+    cursor:pointer;
+    margin-left:8px;
+}
+.reset-btn:hover{ color:#D6DBF5; border-color:#4A4A66; }
+
+.editor-area{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    min-height:0;
+}
+
+#codeInput{
+    flex:1;
+    resize:none;
+    border:none;
+    background:var(--editor-bg);
+    color:var(--editor-ink);
+    font-family:'JetBrains Mono',monospace;
+    font-size:13.5px;
+    line-height:1.65;
+    padding:18px 20px;
+    tab-size:4;
+    outline:none;
+}
+
+.io-panel{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:1px;
+    background:var(--editor-line);
+    border-top:1px solid var(--editor-line);
+    flex-shrink:0;
+    max-height:34%;
+}
+
+.io-col{
+    background:var(--editor-panel);
+    display:flex;
+    flex-direction:column;
+    min-height:120px;
+}
+
+.io-label{
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    color:#7A7FA0;
+    padding:9px 14px 5px;
+    flex-shrink:0;
+}
+
+.io-col textarea{
+    flex:1;
+    resize:none;
+    border:none;
+    background:none;
+    color:#C7CBEB;
+    font-family:'JetBrains Mono',monospace;
+    font-size:12.5px;
+    padding:0 14px 12px;
+    outline:none;
+    line-height:1.55;
+}
+
+.run-row{
+    display:flex;
+    align-items:center;
+    padding:10px 14px;
+    background:var(--editor-panel);
+    border-top:1px solid var(--editor-line);
+    flex-shrink:0;
+}
+
+/* ---------- Output console ---------- */
+
+.console{
+    background:#15151F;
+    border-top:1px solid var(--editor-line);
+    flex-shrink:0;
+    max-height:26%;
+    display:flex;
+    flex-direction:column;
+}
+
+.console-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:9px 16px;
+    border-bottom:1px solid var(--editor-line);
+    flex-shrink:0;
+}
+
+.console-head .io-label{ padding:0; }
+
+.verdict{
+    font-size:11.5px;
+    font-weight:700;
+    padding:4px 12px;
+    border-radius:999px;
+    font-family:'JetBrains Mono',monospace;
+}
+
+.verdict.accepted{ background:var(--green-tint); color:#0F7A3A; }
+.verdict.wrong{ background:var(--red-tint); color:#B91C1C; }
+.verdict.error{ background:var(--orange-tint); color:#B45309; }
+.verdict.neutral{ background:#2A2A3D; color:#9296B5; }
+
+.console-body{
+    padding:12px 16px 16px;
+    overflow-y:auto;
+    font-family:'JetBrains Mono',monospace;
+    font-size:12.5px;
+    line-height:1.6;
+    color:#C7CBEB;
+    white-space:pre-wrap;
+    word-break:break-word;
+}
+
+.console-body .stderr{ color:#F87171; }
+.console-body .meta{ color:#7A7FA0; margin-top:8px; display:block; }
+.console-placeholder{ color:#5B5F80; }
+
+::-webkit-scrollbar{ width:9px; height:9px; }
+::-webkit-scrollbar-track{ background:transparent; }
+::-webkit-scrollbar-thumb{ background:#C9CDDB; border-radius:6px; }
+.right-pane ::-webkit-scrollbar-thumb{ background:#3A3A52; }
+
+@media(max-width:860px){
+    .workspace{ grid-template-columns:1fr; grid-auto-rows:1fr; overflow-y:auto; }
+    .left-pane{ border-right:none; border-bottom:1px solid var(--border); max-height:60vh; }
+    .io-panel{ grid-template-columns:1fr; }
+}
+
+</style>
+</head>
+<body>
+
+<header>
+    <div class="brand"><span class="mark">⚡</span>Code<span>Arena</span></div>
+    <div class="header-right"><span class="pulse-dot"></span>Live Codeforces problem set</div>
+</header>
+
+<div class="workspace">
+
+    <!-- LEFT PANE -->
+    <div class="left-pane">
+
+        <div id="listView">
+            <div class="filters">
+                <div class="search-row">
+                    <input type="text" id="searchBox" placeholder="Search problems by name…">
+                </div>
+                <div class="filter-row">
+                    <select id="ratingFilter">
+                        <option value="">Any rating</option>
+                        <option value="0-1199">Below 1200</option>
+                        <option value="1200-1399">1200–1399</option>
+                        <option value="1400-1599">1400–1599</option>
+                        <option value="1600-1899">1600–1899</option>
+                        <option value="1900-2099">1900–2099</option>
+                        <option value="2100-2399">2100–2399</option>
+                        <option value="2400-9999">2400+</option>
+                    </select>
+                    <select id="tagFilter">
+                        <option value="">Any tag</option>
+                    </select>
+                </div>
+            </div>
+            <div class="status-line" id="statusLine">Loading problem set…</div>
+            <div id="problemList"><div class="loading-msg">Fetching problems from Codeforces…</div></div>
+        </div>
+
+        <div id="detailView" class="detail-view">
+            <button class="back-btn" onclick="backToList()">← Back to problem list</button>
+            <div class="detail-body" id="detailBody"></div>
+        </div>
+
+    </div>
+
+    <!-- RIGHT PANE -->
+    <div class="right-pane">
+
+        <div class="lang-tabs">
+            <button class="lang-tab active" data-lang="python">Python</button>
+            <button class="lang-tab" data-lang="java">Java</button>
+            <button class="lang-tab" data-lang="c">C</button>
+            <button class="lang-tab" data-lang="cpp">C++</button>
+            <div class="editor-spacer"></div>
+        </div>
+
+        <div class="editor-area">
+            <textarea id="codeInput" spellcheck="false"></textarea>
+        </div>
+
+        <div class="io-panel">
+            <div class="io-col">
+                <div class="io-label">Custom input (stdin)</div>
+                <textarea id="stdinBox" placeholder="Values your program reads with input() / cin / scanf…"></textarea>
+            </div>
+            <div class="io-col">
+                <div class="io-label">Expected output (optional)</div>
+                <textarea id="expectedBox" placeholder="Paste the expected answer to auto-check your output…"></textarea>
+            </div>
+        </div>
+
+        <div class="run-row">
+            <button class="run-btn" id="runBtn" onclick="runCode()">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+                Run Code
+            </button>
+            <button class="reset-btn" onclick="resetTemplate()">Reset template</button>
+        </div>
+
+        <div class="console">
+            <div class="console-head">
+                <div class="io-label">Output</div>
+                <span class="verdict neutral" id="verdictBadge">Not run yet</span>
+            </div>
+            <div class="console-body" id="consoleBody"><span class="console-placeholder">Run your code to see stdout, stderr, and the verdict here.</span></div>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+/* ================= State ================= */
+
+let allProblems = [];
+let filteredProblems = [];
+let currentLang = "python";
+let runtimeMap = {}; // langKey -> {language, version}
+
+const CF_API = "https://codeforces.com/api/problemset.problems";
+const PISTON_RUNTIMES = "https://emkc.org/api/v2/piston/runtimes";
+const PISTON_EXECUTE = "https://emkc.org/api/v2/piston/execute";
+
+const templates = {
+python:
+`# Read input with input(), print output with print()
+n = int(input())
+print(n * 2)
+`,
+java:
+`import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        System.out.println(n * 2);
+    }
+}
+`,
+c:
+`#include <stdio.h>
+
+int main() {
+    int n;
+    scanf("%d", &n);
+    printf("%d\\n", n * 2);
+    return 0;
+}
+`,
+cpp:
+`#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    cout << n * 2 << endl;
+    return 0;
+}
+`
+};
+
+const pistonLangName = { python:"python", java:"java", c:"c", cpp:"c++" };
+const fileNames = { python:"main.py", java:"Main.java", c:"main.c", cpp:"main.cpp" };
+
+/* ================= Rating colors (Codeforces convention) ================= */
+
+function ratingColor(r){
+    if(!r) return { bg:"#EEF0F4", fg:"#6B7280" };
+    if(r < 1200) return { bg:"#EEF0F4", fg:"#6B7280" };
+    if(r < 1400) return { bg:"#E4F8EA", fg:"#158C3C" };
+    if(r < 1600) return { bg:"#E1F7F8", fg:"#0E8C91" };
+    if(r < 1900) return { bg:"#E7EEFE", fg:"#2354D6" };
+    if(r < 2100) return { bg:"#F3E9FE", fg:"#7A1FBF" };
+    if(r < 2400) return { bg:"#FEEEDD", fg:"#C6650A" };
+    return { bg:"#FDE7E7", fg:"#C41E1E" };
+}
+
+/* ================= Load problems ================= */
+
+async function loadProblems(){
+    try{
+        const res = await fetch(CF_API);
+        const data = await res.json();
+        if(data.status !== "OK") throw new Error("API returned an error");
+
+        const stats = {};
+        (data.result.problemsetStatistics || data.result.problemStatistics || []).forEach(s=>{});
+        // build a solved-count map from result.problems + result.problemStatistics if present
+        const statList = data.result.problemStatistics || [];
+        statList.forEach(s => { stats[s.contestId + s.index] = s.solvedCount; });
+
+        allProblems = (data.result.problems || []).map(p => ({
+            contestId: p.contestId,
+            index: p.index,
+            name: p.name,
+            rating: p.rating || null,
+            tags: p.tags || [],
+            solvedCount: stats[p.contestId + p.index] || null
+        })).reverse(); // newest first
+
+        populateTagFilter();
+        applyFilters();
+    }catch(err){
+        document.getElementById("problemList").innerHTML =
+            `<div class="empty-msg">Couldn't load the Codeforces problem set right now.<br>Please check your connection and reload.</div>`;
+        document.getElementById("statusLine").textContent = "Failed to load problems";
+    }
+}
+
+function populateTagFilter(){
+    const tagSet = new Set();
+    allProblems.forEach(p => p.tags.forEach(t => tagSet.add(t)));
+    const sel = document.getElementById("tagFilter");
+    [...tagSet].sort().forEach(tag=>{
+        const opt = document.createElement("option");
+        opt.value = tag;
+        opt.textContent = tag;
+        sel.appendChild(opt);
+    });
+}
+
+/* ================= Filtering & rendering ================= */
+
+function applyFilters(){
+    const q = document.getElementById("searchBox").value.trim().toLowerCase();
+    const ratingRange = document.getElementById("ratingFilter").value;
+    const tag = document.getElementById("tagFilter").value;
+
+    let [lo, hi] = ratingRange ? ratingRange.split("-").map(Number) : [null, null];
+
+    filteredProblems = allProblems.filter(p=>{
+        if(q && !p.name.toLowerCase().includes(q)) return false;
+        if(ratingRange){
+            if(!p.rating) return false;
+            if(p.rating < lo || p.rating > hi) return false;
+        }
+        if(tag && !p.tags.includes(tag)) return false;
+        return true;
+    });
+
+    renderList();
+}
+
+function renderList(){
+    const container = document.getElementById("problemList");
+    const statusLine = document.getElementById("statusLine");
+    const shown = filteredProblems.slice(0, 200);
+
+    statusLine.innerHTML = `<b>${filteredProblems.length}</b> problems match &middot; showing ${shown.length}`;
+
+    if(shown.length === 0){
+        container.innerHTML = `<div class="empty-msg">No problems match these filters.<br>Try widening your search.</div>`;
+        return;
+    }
+
+    container.innerHTML = shown.map((p, i)=>{
+        const c = ratingColor(p.rating);
+        return `
+        <div class="problem-row" data-idx="${i}" onclick="selectProblem(${i})">
+            <div class="problem-row-main">
+                <div><span class="problem-idx">${p.contestId}${p.index}</span><span class="problem-name">${escapeHtml(p.name)}</span></div>
+                <div class="problem-tags">${p.tags.slice(0,4).join(" · ") || "no tags listed"}</div>
+            </div>
+            <div class="rating-pill" style="background:${c.bg};color:${c.fg}">${p.rating || "—"}</div>
+        </div>`;
+    }).join("");
+}
+
+function escapeHtml(s){
+    return s.replace(/[&<>"']/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+}
+
+document.getElementById("searchBox").addEventListener("input", applyFilters);
+document.getElementById("ratingFilter").addEventListener("change", applyFilters);
+document.getElementById("tagFilter").addEventListener("change", applyFilters);
+
+/* ================= Problem detail ================= */
+
+function selectProblem(i){
+    const p = filteredProblems[i];
+    if(!p) return;
+
+    document.querySelectorAll(".problem-row").forEach(el => el.classList.remove("active"));
+    const row = document.querySelector(`.problem-row[data-idx="${i}"]`);
+    if(row) row.classList.add("active");
+
+    const c = ratingColor(p.rating);
+    const url = `https://codeforces.com/problemset/problem/${p.contestId}/${p.index}`;
+
+    document.getElementById("detailBody").innerHTML = `
+        <div class="detail-title">${p.contestId}${p.index} — ${escapeHtml(p.name)}</div>
+        <div class="detail-meta">
+            <span class="rating-pill" style="background:${c.bg};color:${c.fg}">Rating ${p.rating || "unrated"}</span>
+            ${p.solvedCount ? `<span class="chip">${p.solvedCount.toLocaleString()} solved</span>` : ""}
+            ${p.tags.map(t => `<span class="chip">${escapeHtml(t)}</span>`).join("")}
+        </div>
+        <div class="notice-box">
+            The Codeforces API only provides problem metadata (title, tags, rating) — not the full
+            statement or official test cases. Open the problem on Codeforces to read it in full,
+            then write your solution on the right and test it against your own input below.
+        </div>
+        <div class="detail-actions">
+            <a class="link-btn primary" href="${url}" target="_blank" rel="noopener">Open full statement ↗</a>
+            <button class="link-btn ghost" onclick="backToList()">Keep browsing</button>
+        </div>
+    `;
+
+    document.getElementById("listView").classList.add("hidden");
+    document.getElementById("detailView").classList.add("active");
+}
+
+function backToList(){
+    document.getElementById("listView").classList.remove("hidden");
+    document.getElementById("detailView").classList.remove("active");
+}
+
+/* ================= Language tabs ================= */
+
+document.querySelectorAll(".lang-tab").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+        document.querySelectorAll(".lang-tab").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        currentLang = btn.dataset.lang;
+        document.getElementById("codeInput").value = templates[currentLang];
+        resetConsole();
+    });
+});
+
+function resetTemplate(){
+    document.getElementById("codeInput").value = templates[currentLang];
+}
+
+document.getElementById("codeInput").value = templates[currentLang];
+
+// simple tab-key support in the editor
+document.getElementById("codeInput").addEventListener("keydown", function(e){
+    if(e.key === "Tab"){
+        e.preventDefault();
+        const start = this.selectionStart, end = this.selectionEnd;
+        this.value = this.value.substring(0,start) + "    " + this.value.substring(end);
+        this.selectionStart = this.selectionEnd = start + 4;
+    }
+});
+
+/* ================= Piston runtimes ================= */
+
+async function loadRuntimes(){
+    try{
+        const res = await fetch(PISTON_RUNTIMES);
+        const list = await res.json();
+        Object.entries(pistonLangName).forEach(([key, langName])=>{
+            const matches = list.filter(r => r.language === langName || (r.aliases && r.aliases.includes(langName)));
+            if(matches.length){
+                runtimeMap[key] = { language: matches[0].language, version: matches[0].version };
+            }
+        });
+    }catch(err){
+        // fall back to "*" version if the runtime list can't be fetched
+    }
+}
+
+/* ================= Run code ================= */
+
+function resetConsole(){
+    document.getElementById("consoleBody").innerHTML = `<span class="console-placeholder">Run your code to see stdout, stderr, and the verdict here.</span>`;
+    setVerdict("neutral", "Not run yet");
+}
+
+function setVerdict(cls, text){
+    const badge = document.getElementById("verdictBadge");
+    badge.className = "verdict " + cls;
+    badge.textContent = text;
+}
+
+async function runCode(){
+    const runBtn = document.getElementById("runBtn");
+    const code = document.getElementById("codeInput").value;
+    const stdin = document.getElementById("stdinBox").value;
+    const expected = document.getElementById("expectedBox").value.trim();
+
+    runBtn.disabled = true;
+    runBtn.textContent = "Running…";
+    setVerdict("neutral", "Running…");
+    document.getElementById("consoleBody").innerHTML = `<span class="console-placeholder">Compiling and running your code…</span>`;
+
+    const rt = runtimeMap[currentLang] || { language: pistonLangName[currentLang], version: "*" };
+
+    try{
+        const res = await fetch(PISTON_EXECUTE, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                language: rt.language,
+                version: rt.version,
+                files: [{ name: fileNames[currentLang], content: code }],
+                stdin: stdin
+            })
+        });
+
+        const data = await res.json();
+        renderRunResult(data, expected);
+
+    }catch(err){
+        document.getElementById("consoleBody").innerHTML = `<span class="stderr">Couldn't reach the code execution service. Check your connection and try again.</span>`;
+        setVerdict("error", "Service unreachable");
+    }finally{
+        runBtn.disabled = false;
+        runBtn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg> Run Code`;
+    }
+}
+
+function renderRunResult(data, expected){
+    const body = document.getElementById("consoleBody");
+    let html = "";
+
+    // Compile error (C, C++, Java)
+    if(data.compile && data.compile.code !== 0){
+        html += `<span class="stderr">${escapeHtml(data.compile.stderr || data.compile.output || "Compilation failed.")}</span>`;
+        body.innerHTML = html;
+        setVerdict("error", "Compilation Error");
+        return;
+    }
+
+    const run = data.run || {};
+    const stdout = (run.stdout || "").replace(/\n+$/,"");
+    const stderr = run.stderr || "";
+
+    html += stdout ? escapeHtml(stdout) : `<span class="console-placeholder">(no output)</span>`;
+    if(stderr){
+        html += `\n<span class="stderr">${escapeHtml(stderr)}</span>`;
+    }
+    html += `<span class="meta">exit code ${run.code ?? "?"} · ${rtLabel()}</span>`;
+    body.innerHTML = html;
+
+    if(run.code !== 0){
+        setVerdict("error", "Runtime Error");
+        return;
+    }
+
+    if(expected){
+        if(stdout.trim() === expected.trim()){
+            setVerdict("accepted", "✓ Accepted");
+        }else{
+            setVerdict("wrong", "✗ Wrong Answer");
+        }
+    }else{
+        setVerdict("neutral", "Executed");
+    }
+}
+
+function rtLabel(){
+    const rt = runtimeMap[currentLang];
+    return rt ? `${rt.language} ${rt.version}` : currentLang;
+}
+
+/* ================= Init ================= */
+
+loadProblems();
+loadRuntimes();
+
+</script>
+
+</body>
+</html>
