@@ -1,9 +1,8 @@
-const form = document.getElementById("loginForm");
+   const form = document.getElementById("loginForm");
 
-form.addEventListener("submit", function(e){
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();
 
-    e.preventDefault();
-
-    window.location.href = "home.html";
-
-});
+        // Redirect to home page
+        window.location.href = "./home.html";
+    });
