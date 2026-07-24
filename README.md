@@ -49,3 +49,32 @@ Excellent readability
 Looks premium
 Works well for both headings and body text
 ------------------------------------------------------------------------------
+
+structur of project
+C:.
+│   index.html
+│   
+├───assets
+│       IntervexaAI_home_boy.mp4
+│       IntervexaAI_home_boy.png
+│       IntervexaAI_home_girl.png
+│       
+├───css
+│       aptitude.css
+│       home.css
+│       index.css
+│       job.css
+│       
+├───html
+│       aptitude.html
+│       coding.html
+│       home.html
+│       index.html
+│       interview.html
+│       job.html
+│       
+└───js
+        aptitude.js
+        home.js
+        index.js
+        job.js
