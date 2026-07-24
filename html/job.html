@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Intervexa AI - Jobs</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/job.css">
+
+</head>
+
+
+<body>
+
+
+<header>
+
+<div class="logo">
+Intervexa<span>AI</span>
+</div>
+
+<div class="header-tag">Remote-first careers</div>
+
+</header>
+
+
+
+<div class="container">
+
+<div class="hero">
+<div class="eyebrow">Live listings, updated daily</div>
+<h1>Find your dream <span class="accent">remote</span> job</h1>
+<p class="subhead">Search curated remote roles from companies hiring worldwide — filter by title, location, and job type to find the right fit.</p>
+</div>
+
+
+<div class="filters">
+
+<div class="select-wrap">
+<select id="jobTitle">
+<option value="developer">Developer</option>
+<option value="frontend">Frontend Developer</option>
+<option value="backend">Backend Developer</option>
+<option value="java">Java Developer</option>
+<option value="python">Python Developer</option>
+</select>
+</div>
+
+<div class="select-wrap">
+<select id="location">
+<option value="">Worldwide</option>
+<option value="india">India</option>
+<option value="usa">USA</option>
+<option value="uk">UK</option>
+</select>
+</div>
+
+<div class="select-wrap">
+<select id="jobType">
+<option value="">All Types</option>
+<option value="fulltime">Full Time</option>
+<option value="parttime">Part Time</option>
+<option value="intern">Intern</option>
+</select>
+</div>
+
+<button onclick="getJobs()">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+Search Jobs
+</button>
+
+</div>
+
+<div class="results-bar" id="resultsBar" style="display:none;">
+<span id="resultCount"></span>
+<span id="resultQuery"></span>
+</div>
+
+
+<div id="jobs">
+<div class="loading-grid">
+<div class="skeleton-card"></div>
+<div class="skeleton-card"></div>
+<div class="skeleton-card"></div>
+</div>
+</div>
+
+</div>
+
+<footer>Powered by Jobicy · Intervexa AI</footer>
+
+<script src="../js/job.js"></script>
+
+
+</body>
+
+</html>
