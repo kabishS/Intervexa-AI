@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Intervexa AI — Interview Practice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/interview.css">
+</head>
+<body>
+
+<div class="app-shell">
+  <div class="brand">
+    <div class="mark">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 15a3 3 0 003-3V6a3 3 0 10-6 0v6a3 3 0 003 3z" fill="white"/><path d="M6 11v1a6 6 0 0012 0v-1M12 18v3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </div>
+    <span>Interv<em>exa</em> AI</span>
+  </div>
+
+  <!-- SETUP SCREEN -->
+  <section id="screen-setup" class="screen active">
+    <div class="card setup-shell">
+      <h1>Set up your mock interview</h1>
+      <p class="sub">Intervexa AI will interview you out loud, one question at a time. Answer by voice or by typing — feedback comes at natural checkpoints, not after every question.</p>
+
+      <div class="field">
+        <label for="roleInput">Role you're interviewing for</label>
+        <input type="text" id="roleInput" placeholder="e.g. Frontend Developer, Product Manager">
+      </div>
+
+      <div class="field">
+        <label for="levelSelect">Experience level</label>
+        <select id="levelSelect">
+          <option value="Entry-level">Entry-level</option>
+          <option value="Mid-level" selected>Mid-level</option>
+          <option value="Senior">Senior</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Interviewer voice</label>
+        <div class="voice-toggle">
+          <label class="voice-option">
+            <input type="radio" name="gender" value="female" checked>
+            <span class="pill"><img src="../assets/IntervexaAI_home_girl.png" alt=""> Female</span>
+          </label>
+          <label class="voice-option">
+            <input type="radio" name="gender" value="male">
+            <span class="pill"><img src="../assets/IntervexaAI_home_boy.png" alt=""> Male</span>
+          </label>
+        </div>
+      </div>
+
+      <button class="btn btn-primary btn-block" id="startBtn">Start interview</button>
+      <p class="footer-note" id="setupError" style="color:#DC2626;"></p>
+    </div>
+  </section>
+
+  <!-- INTERVIEW SCREEN -->
+  <section id="screen-interview" class="screen">
+    <div class="top-bar">
+      <div style="font-size:.85rem;color:var(--text-muted);font-weight:600;" id="roleLabel"></div>
+      <button class="btn btn-danger-outline" id="endBtn">End interview</button>
+    </div>
+
+    <div class="interview-grid">
+      <!-- LEFT: AI avatar + question -->
+      <div class="col-card">
+        <div class="avatar-frame" id="avatarFrame">
+          <img id="avatarImage" class="avatar-photo" src="../assets/IntervexaAI_home_girl.png" alt="Interviewer">
+          <div class="speaking-badge"><span class="dot"></span> Speaking</div>
+        </div>
+        <div class="question-box loading" id="questionBox">
+          <p id="questionText">Loading…</p>
+        </div>
+      </div>
+
+      <!-- RIGHT: camera + answer -->
+      <div class="col-card">
+        <div class="camera-frame" id="cameraFrame">
+          <video id="cameraVideo" autoplay playsinline muted></video>
+          <p class="camera-off-msg" id="cameraOffMsg">Camera not available — you can still answer by mic or typing.</p>
+          <div class="rec-badge"><span class="dot"></span> Rec</div>
+        </div>
+
+        <label for="answerInput">Your answer</label>
+        <textarea id="answerInput" placeholder="Speak using the mic, or type your answer here…"></textarea>
+
+        <div class="controls-row">
+          <button class="mic-btn" id="micBtn" title="Record answer">
+            <svg viewBox="0 0 24 24"><path d="M12 15a3 3 0 003-3V6a3 3 0 10-6 0v6a3 3 0 003 3z"/><path d="M6 11v1a6 6 0 0012 0v-1M12 18v3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/></svg>
+          </button>
+          <button class="btn btn-primary" id="submitBtn" style="flex:1;">Submit answer</button>
+        </div>
+        <p class="footer-note">Intervexa reads each question aloud automatically. Click the mic to answer by voice.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEEDBACK SCREEN -->
+  <section id="screen-feedback" class="screen">
+    <div class="card setup-shell">
+      <span class="badge">Feedback checkpoint</span>
+      <h1>Here's how you're doing</h1>
+      <div class="feedback-body" id="feedbackText">Analyzing your recent answers…</div>
+      <div class="actions-row">
+        <button class="btn btn-primary" id="continueBtn" style="flex:1;">Continue interview</button>
+        <button class="btn btn-ghost" id="restartBtn">Start over</button>
+      </div>
+    </div>
+  </section>
+</div>
+<script src="../js/interview.js"></script>
+</body>
+</html>

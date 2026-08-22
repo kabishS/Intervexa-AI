@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Intervexa AI | Aptitude</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="../css/aptitude.css">
+</head>
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<header>
+    <nav class="navbar">
+
+        <a href="home.html" class="logo">
+            <i class="fa-solid fa-microchip"></i>
+            <span>Intervexa AI</span>
+        </a>
+
+        <ul class="nav-links">
+            <li><a href="home.html">Home</a></li>
+            <li><a href="aptitude.html" class="active">Aptitude</a></li>
+            <li><a href="coding.html">Coding</a></li>
+            <li><a href="interview.html">Interview</a></li>
+            <li><a href="job.html">Job</a></li>
+        </ul>
+
+        <button id="menuBtn" class="menu-btn">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+    </nav>
+</header>
+
+<!-- ================= QUIZ ================= -->
+
+<section class="quiz-wrap">
+
+    <div class="stat-bar">
+        <span class="stat-pill"><i class="fa-solid fa-list-ol"></i>Question <span id="qCount">0</span></span>
+        <span class="stat-pill"><i class="fa-solid fa-circle-check"></i>Score <span id="qScore">0</span></span>
+    </div>
+
+    <div class="quiz-card" id="quizCard">
+        <div class="loader" id="loader">
+            <div class="spinner"></div>
+            <p>Loading question...</p>
+        </div>
+    </div>
+
+</section>
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+    <div class="footer-content">
+        <h2>Intervexa AI</h2>
+        <p>Practice • Learn • Succeed</p>
+
+        <div class="footer-links">
+            <a href="home.html">Home</a>
+            <a href="aptitude.html">Aptitude</a>
+            <a href="coding.html">Coding</a>
+            <a href="interview.html">Interview</a>
+            <a href="job.html">Jobs</a>
+        </div>
+
+        <p class="copyright">© 2026 Intervexa AI. All Rights Reserved.</p>
+    </div>
+</footer>
+
+<script src="../js/aptitude.js"></script>
+
+</body>
+</html>
