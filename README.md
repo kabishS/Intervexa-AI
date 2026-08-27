@@ -1,363 +1,171 @@
-# 🚀 Intervexa-AI
+# 🤖 Intervexa-AI
 
-> **AI-Powered Interview Preparation Platform**
+An AI-powered interview preparation platform built using **HTML, CSS, JavaScript, Bootstrap, Groq API, and LocalStorage**. Intervexa-AI helps students prepare for placements through aptitude practice, coding challenges, AI-powered mock interviews, job search, profile analysis, and performance tracking.
 
-Intervexa-AI is a web-based interview preparation platform designed to help students and job seekers improve their **aptitude, coding, interview, and job-search skills** in one place.
-
-The platform provides an interactive learning experience with AI-powered interview assistance, coding practice, aptitude tests, profile analysis, and personalized progress tracking.
-
-## 🌐 Live Demo
-
-🔗 **[Try Intervexa-AI](https://kabishs.github.io/Intervexa-AI/)**
-
-🔗 **[GitHub Repository](https://github.com/kabishS/Intervexa-AI)**
+🌐 **Live Demo:** https://kabishs.github.io/Intervexa-AI/
 
 ---
 
 ## ✨ Features
 
-### 🎯 Aptitude Practice
-
-* Practice aptitude questions.
-* Multiple-choice questions.
-* Instant score calculation.
-* Track your aptitude performance.
-
-### 💻 Coding Practice
-
-* Solve programming challenges.
-* Practice coding concepts.
-* Track coding performance.
-* Improve problem-solving skills.
-
-### 🤖 AI Interview
-
-* AI-powered mock interview experience.
-* Generate interview questions dynamically.
-* Get AI-based feedback on answers.
-* Practice technical and HR interview questions.
-
-### 💼 Job Search
-
-* Search for available job opportunities.
-* Explore relevant positions.
-* Keep track of job applications.
-
-### 👤 Profile Analysis
-
-* Analyze your profile.
-* Track your preparation progress.
-* View performance across different modules.
-
-### 📊 Progress Dashboard
-
-* Aptitude score
-* Coding score
-* Interview score
-* Job application history
-* Overall preparation progress
-
-### 💾 Local Data Storage
-
-* Uses browser `localStorage` for client-side data persistence.
-* Stores user progress and selected application data locally.
+* 🔐 User Login & Authentication
+* 🏠 Interactive Home Dashboard
+* 🧠 Aptitude Practice
+* 💻 Coding Practice
+* 🤖 AI-Powered Mock Interview
+* 💬 AI Interview Feedback
+* 💼 Job Search
+* 👤 Profile Analysis
+* 📊 Performance Dashboard
+* 📈 Aptitude, Coding & Interview Score Tracking
+* 📝 Interview Preparation
+* 💾 LocalStorage Data Persistence
+* 📱 Fully Responsive Design
+* ⚡ Interactive and User-Friendly UI
+* 🔗 Social Media Integration
 
 ---
 
-## 🛠️ Technology Stack
+## 🛠️ Technologies Used
 
-| Technology   | Purpose                             |
-| ------------ | ----------------------------------- |
-| HTML5        | Website structure                   |
-| CSS3         | Styling and responsive UI           |
-| JavaScript   | Application logic and interactivity |
-| Bootstrap    | Responsive UI components            |
-| Groq API     | AI-powered interview functionality  |
-| Web APIs     | Browser-based functionality         |
-| LocalStorage | Client-side data storage            |
-| Git          | Version control                     |
-| GitHub       | Source code hosting                 |
-| GitHub Pages | Deployment                          |
+* **HTML5** – Page Structure
+* **CSS3** – Styling and Responsive Design
+* **JavaScript (ES6)** – Application Logic & Interactivity
+* **Bootstrap** – Responsive UI Components
+* **Groq API** – AI Interview Functionality
+* **LocalStorage** – Client-Side Data Storage
+* **Web APIs** – Browser-Based Features
+* **Git & GitHub** – Version Control
+* **GitHub Pages** – Deployment
 
 ---
 
-## 🏗️ Project Structure
+## 📂 Project Structure
 
 ```text
 Intervexa-AI/
 │
-├── .github/
-│   └── workflows/
+├── index.html
+├── aptitude.html
+├── coding.html
+├── interview.html
+├── jobs.html
+├── profile.html
 │
-├── assets/
-│   ├── images/
-│   └── other assets
-│
-├── css/
+├── CSS/
 │   └── style.css
 │
-├── html/
-│   ├── aptitude.html
-│   ├── coding.html
-│   ├── interview.html
-│   ├── jobs.html
-│   └── profile.html
-│
-├── js/
+├── JS/
 │   ├── aptitude.js
 │   ├── coding.js
 │   ├── interview.js
 │   ├── jobs.js
 │   └── profile.js
 │
-├── index.html
+├── images/
+│
 └── README.md
 ```
 
-> The exact files inside the `html`, `css`, and `js` directories may change as the project evolves.
+---
+
+## 🎯 Highlights
+
+This project provides an all-in-one platform for interview and placement preparation:
+
+* 🤖 AI-Powered Interview Preparation
+* 🧠 Aptitude Test Practice
+* 💻 Coding Practice
+* 💼 Job Opportunity Search
+* 👤 Profile Analysis
+* 📊 Performance Tracking
+* 💾 Client-Side Data Storage
+* 📱 Responsive Web Design
+* ⚡ Interactive User Experience
 
 ---
 
-## 🔄 Application Flow
+## 🤖 AI Interview
 
-```text
-                    ┌──────────────────┐
-                    │    Intervexa-AI  │
-                    └────────┬─────────┘
-                             │
-              ┌──────────────┼──────────────┐
-              │              │              │
-              ▼              ▼              ▼
-         Aptitude         Coding        AI Interview
-              │              │              │
-              └──────────────┼──────────────┘
-                             │
-                             ▼
-                       Performance
-                         Tracking
-                             │
-              ┌──────────────┼──────────────┐
-              ▼              ▼              ▼
-          Profile          Jobs         Progress
-          Analysis        Search        Dashboard
-```
-
----
-
-## 🤖 AI Interview Module
-
-The AI Interview module is one of the core features of Intervexa-AI.
+The AI Interview module uses the **Groq API** to provide an interactive mock interview experience.
 
 The system can:
 
-1. Ask interview questions.
-2. Accept the user's response.
-3. Send relevant information to the AI service.
-4. Analyze the response.
-5. Generate feedback.
-6. Help the user identify areas for improvement.
+* Generate interview questions
+* Accept user answers
+* Analyze responses
+* Provide AI-generated feedback
+* Help identify areas for improvement
+* Support technical and HR interview preparation
 
-This provides a realistic environment for practicing interviews before attending real interviews.
-
----
-
-## 💾 Data Management
-
-Intervexa-AI uses browser-based storage for selected user data.
-
-```javascript
-localStorage.setItem("interviewScore", score);
-
-const score = localStorage.getItem("interviewScore");
-```
-
-This allows users to retain preparation data between browser sessions without requiring a traditional backend database.
+This allows students to practice interviews in a realistic AI-powered environment.
 
 ---
 
-## 🔐 API Configuration
+## 💾 Data Storage
 
-If the AI interview functionality requires an API key, configure the API according to the implementation in the project.
+Intervexa-AI uses **Browser LocalStorage** to store user-related data such as:
 
-### ⚠️ Security
+* Aptitude scores
+* Coding scores
+* Interview scores
+* Job application history
+* Profile information
+* User progress
 
-**Never commit a real API key to GitHub.**
-
-Avoid:
-
-```javascript
-const API_KEY = "your-real-api-key";
-```
-
-For production applications, API keys should be protected through a backend/server-side environment rather than exposing them directly in frontend JavaScript.
+This allows data to remain available between browser sessions without requiring a backend database.
 
 ---
 
-## 🚀 Run Locally
+## 📚 Learning Outcomes
 
-### 1. Clone the repository
+This project helped me strengthen my knowledge of:
 
-```bash
-git clone https://github.com/kabishS/Intervexa-AI.git
-```
-
-### 2. Open the project
-
-```bash
-cd Intervexa-AI
-```
-
-### 3. Start the application
-
-Since this is a frontend web application, you can open:
-
-```text
-index.html
-```
-
-You can also use **VS Code Live Server** for a better development experience.
-
-### 4. Open in browser
-
-```text
-http://127.0.0.1:5500/
-```
+* HTML5 & CSS3
+* JavaScript DOM Manipulation
+* Bootstrap
+* API Integration
+* Groq API Integration
+* LocalStorage
+* Responsive Web Design
+* UI/UX Design
+* Git & GitHub Workflow
+* AI Application Development
+* Frontend Project Architecture
 
 ---
 
-## 📱 Responsive Design
+## 🔮 Future Enhancements
 
-Intervexa-AI is designed to work across:
-
-* 💻 Desktop
-* 💻 Laptop
-* 📱 Mobile
-* 📱 Tablet
-
-Bootstrap and responsive CSS techniques are used to create a flexible interface.
-
----
-
-## 🎯 Project Goals
-
-The main goals of Intervexa-AI are to:
-
-* Help students prepare for placements.
-* Provide an all-in-one interview preparation platform.
-* Combine aptitude and coding practice.
-* Provide AI-powered interview practice.
-* Track preparation progress.
-* Help users identify their strengths and weaknesses.
-* Make interview preparation accessible from a browser.
+* 🎙️ Voice-Based AI Interviews
+* 📄 AI Resume Analysis
+* 📊 Advanced Performance Analytics
+* 🎯 Personalized Learning Roadmap
+* 🧠 Adaptive Interview Questions
+* ☁️ Cloud Database Integration
+* 🔐 Secure User Authentication
+* 📱 Progressive Web App Support
+* 📝 Interview History & Reports
 
 ---
 
-## 🔮 Future Improvements
+## 📬 Connect With Me
 
-Planned improvements include:
-
-* [ ] Advanced AI interview evaluation
-* [ ] Voice-based AI interviews
-* [ ] Resume analysis
-* [ ] Personalized interview questions
-* [ ] Advanced analytics dashboard
-* [ ] More coding problems
-* [ ] More aptitude categories
-* [ ] User authentication
-* [ ] Cloud database integration
-* [ ] Job application tracking
-* [ ] Interview history
-* [ ] AI-generated learning roadmap
-* [ ] Dark mode
-* [ ] PWA/mobile support
-
----
-
-## 🧪 Testing
-
-The project can be tested manually across:
-
-* Login/user flow
-* Aptitude questions
-* Coding challenges
-* AI interview
-* Profile dashboard
-* Job search
-* LocalStorage persistence
-* Responsive layouts
-
-For browser automation, tools such as **Playwright** can be used to automate important user journeys.
-
----
-
-## 📸 Screenshots
-
-Add screenshots of the major modules here:
-
-```text
-screenshots/
-├── home.png
-├── aptitude.png
-├── coding.png
-├── interview.png
-├── jobs.png
-└── dashboard.png
-```
-
-Example:
-
-### 🏠 Home
-
-![Intervexa-AI Home](screenshots/home.png)
-
-### 🤖 AI Interview
-
-![AI Interview](screenshots/interview.png)
-
-### 📊 Dashboard
-
-![Dashboard](screenshots/dashboard.png)
-
----
-
-## 👨‍💻 Developer
-
-### Kabish S
-
-B.Tech Information Technology Student
-VSB College of Engineering Technical Campus
-
-**Focus:** Java Full Stack Development | AI Applications | Software Testing
-
-### Connect With Me
-
-* 🌐 Portfolio: [kabish-web.netlify.app](https://kabish-web.netlify.app/)
 * 💻 GitHub: [github.com/kabishS](https://github.com/kabishS)
-* 🔗 LinkedIn: [linkedin.com/in/kabish](https://linkedin.com/in/kabish)
+* 💼 LinkedIn: [linkedin.com/in/kabish](https://www.linkedin.com/in/kabish/)
+* 🧩 LeetCode: [leetcode.com/u/kabish10](https://leetcode.com/u/kabish10/)
+* 📷 Instagram: [@itz._.kabish](https://www.instagram.com/itz._.kabish)
 
 ---
 
-## ⭐ Support
+## 👨‍💻 Author
 
-If you find **Intervexa-AI** useful:
+**Kabish S**
 
-⭐ Star the repository
-🍴 Fork the project
-🐛 Report issues
-💡 Suggest new features
+Java Full Stack Developer | Frontend Developer | Manual QA Tester | AI Enthusiast
 
 ---
 
-## 📄 License
-
-This project is available for educational and personal development purposes.
-
----
-
-<p align="center">
+⭐ **If you find Intervexa-AI useful, consider giving the repository a star!**
 
 ### 🚀 Prepare Better. Practice Smarter. Interview Confidently.
-
-**Built with ❤️ by Kabish S**
-
-</p>
