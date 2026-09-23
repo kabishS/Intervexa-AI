@@ -7,7 +7,7 @@
    never reaches the browser.
    ========================================================= */
 const CONFIG = {
-  GROQ_API_KEY: "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",
+  GROQ_API_KEY: "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",
   GROQ_MODEL: "openai/gpt-oss-120b", // current recommended Groq model (llama-3.3-70b-versatile was deprecated)
   GROQ_ENDPOINT: "https://api.groq.com/openai/v1/chat/completions",
   FEEDBACK_EVERY: 10, // number of answered questions between feedback checkpoints (never shown to the user)
